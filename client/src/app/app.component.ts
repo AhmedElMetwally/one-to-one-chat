@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { UserService } from './user/user.service';
 import { Component } from '@angular/core';
 
@@ -7,7 +8,7 @@ import { Component } from '@angular/core';
   styleUrls : ['app.component.css']
 })
 export class AppComponent {
-  constructor(private _userService:UserService){
+  constructor(private _userService:UserService , private _router:Router){
     
     // on open the app 
     // ckeck if this app is have token
@@ -18,6 +19,7 @@ export class AppComponent {
       this._userService.ckeckToken()
       .subscribe(data => {
         if(!data.auth){
+          this._router.navigate(['/user' , 'signin']);
           localStorage.clear();
         }
       })

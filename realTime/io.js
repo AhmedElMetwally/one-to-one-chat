@@ -18,6 +18,9 @@ module.exports =  io => {
         // sent all users and online true or false
         socket.on('login' , token  =>  { 
             jwt.verify( token , secret , (err , decode)=>{
+                if(err){
+                    return false
+                };
                 User.update({_id : decode.user._id} , {socketId : socket.id})
                     .then(res => {
                         User.find({})
