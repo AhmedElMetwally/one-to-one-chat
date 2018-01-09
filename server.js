@@ -9,23 +9,26 @@ const Cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config()
 
-// mongoose config
-mongoose.Promise = require('bluebird');
-// mongoose.connect('mongodb://localhost/chat')
-mongoose.connect(process.env.databaseUrl)
-    .then(()=>console.log('connected to the database'))
-    .catch(err=>console.log(err));
-
 // app
 const app = express()
 
+// mongoose config
+// if server run in local set database in local
+// if server run in host server set datavbase in server
+mongoose.Promise = require('bluebird');
+mongoose.connect( app.get('env') == 'development' ? process.env.localDatabaseUrl : process.env.serverDatabaseUrl )
+    .then(()=>console.log('connected to the database'))
+    .catch(err=>console.log(err));
+
+
 // http
 const http = require('http').Server(app);
-http.listen( process.env.PORT || 3000 , ()=>console.log('server is -> http://localhost:3000'))
+http.listen( process.env.PORT || 3000 , ()=>console.log('server is run [3000]'))
 
 // socket.io
 const io = require('socket.io')(http);
 require('./realTime/io')(io)
+
 
 // middlewares
 app.use(Cors());

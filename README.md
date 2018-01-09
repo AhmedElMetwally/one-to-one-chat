@@ -21,8 +21,9 @@
 <ul>
     <li>MongoDB</li>
     <li>Express</li>
-    <li>AngularJS</li>
+    <li>Angular 5</li>
     <li>NodeJS</li>
+    <li>Socket.io</li>
 </ul>
 
 

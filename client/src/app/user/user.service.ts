@@ -1,9 +1,8 @@
-import { URL } from './../app.URL';
+import { environment } from '../../environments/environment';
 import { Iuser } from './app.user';
 import { Injectable } from '@angular/core';
 import { Http , Headers , Response} from '@angular/http';
 import 'rxjs/add/operator/map';
-
 @Injectable()
 export class UserService {
   constructor(private _http:Http) {};
@@ -32,7 +31,7 @@ export class UserService {
   signupUser( user:Iuser ) :any {
     var headers = new Headers();
     headers.append('Content-Type','application/json');
-    return this._http.post(URL + '/api/signup' , user , {headers :headers})
+    return this._http.post(environment.url + '/api/signup' , user , {headers :headers})
       .map((res:Response) => res.json());
   }
 
@@ -41,7 +40,7 @@ export class UserService {
   signinUser( user:Iuser ) :any {
     var headers = new Headers();
     headers.append('Content-Type','application/json');
-    return this._http.post(URL + '/api/signin' , user , {headers :headers})
+    return this._http.post(environment.url + '/api/signin' , user , {headers :headers})
       .map((res:Response) => res.json());
   }
 

@@ -1,10 +1,10 @@
-import { URL } from './../app.URL';
 import { Imsg } from './chat.msg';
 import { UserService } from './../user/user.service';
 import { Iuser } from './../user/app.user';
 import { Component, OnInit } from '@angular/core';
 import * as io from 'socket.io-client';
 import { ChatService } from './chat.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-chat',
@@ -12,8 +12,9 @@ import { ChatService } from './chat.service';
   styleUrls : ['chat.component.css']
 })
 export class ChatComponent implements OnInit {
-  // url socket.io
-  io = io(URL);
+  
+  // socket.io
+  io = io(environment.url);
   
   // _id  
   // token
