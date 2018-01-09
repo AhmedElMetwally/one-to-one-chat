@@ -17,35 +17,34 @@ module.exports =  io => {
         // compare users from DB with users online connected  ->  DB.user.socketId  == Object.keys(io.eio.clients)
         // sent all users and online true or false
         socket.on('login' , token  =>  { 
-            jwt.verify( token , secret , (err , decode)=>{
-                if(err){
-                    return false
-                };
-                User.update({_id : decode.user._id} , {socketId : socket.id})
-                    .then(res => {
-                        User.find({})
-                            .lean() // this is very import to change Property in mongoose 
-                            .then(users =>{
-                                var onlineClients = Object.keys(io.eio.clients);
-                                var _users = [];
-                                for(var user of users){
-                                    if(onlineClients.indexOf(user.socketId) > -1){
-                                        user.online = true;
-                                        _users.push(user);
-                                    }else{
-                                        user.online = false;
-                                        _users.push(user);
+            jwt.verify( token , secret , (err , decode )=>{
+                if( !err ){
+                    User.update({_id : decode.user._id} , {socketId : socket.id})
+                        .then(res => {
+                            User.find({})
+                                .lean() // this is very import to change Property in mongoose 
+                                .then(users =>{
+                                    var onlineClients = Object.keys(io.eio.clients);
+                                    var _users = [];
+                                    for(var user of users){
+                                        if(onlineClients.indexOf(user.socketId) > -1){
+                                            user.online = true;
+                                            _users.push(user);
+                                        }else{
+                                            user.online = false;
+                                            _users.push(user);
+                                        }
                                     }
-                                }
-                                io.emit('login' ,  _users)
-                            })
-                            .catch(err => {
-                                // io.emit('login' ,  false)
-                            })
-                    })
-                    .catch(err => {
-                        // io.emit('login' ,  false)
-                    })
+                                    io.emit('login' ,  _users)
+                                })
+                                .catch(err => {
+                                    // io.emit('login' ,  false)
+                                })
+                        })
+                        .catch(err => {
+                            // io.emit('login' ,  false)
+                        })
+                };
             });
         })
 

@@ -84,15 +84,19 @@ router.get('/messages' , function(req,res){
 // check if user in in DB
 // ckeck if this token is good
 router.get('/ckeck' , function(req,res){
-  User.findById(req.params._id)
+  User.findById(req.query._id)
     .then(user =>{
-      jwt.verify(req.query.token , secret , function(err , decode){
-        if(err){
-          res.json({auth : false});
-        }else{
-          res.json({auth : true})
-        }   
-      })
+      if(user){
+        jwt.verify(req.query.token , secret , function(err , decode){
+          if(err){
+            res.json({auth : false});
+          }else{
+            res.json({auth : true})
+          }   
+        })
+      }else{
+        res.json({auth : false})
+      }
     })
     .catch(err =>{
       res.json({auth : false})
