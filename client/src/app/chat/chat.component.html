@@ -12,18 +12,20 @@
   
         <!-- check if users -->
         <div *ngIf="users.length" class="users" >
-  
-          <!-- clear the caller in click -->
-          <button *ngIf='caller' style="margin-top:0;padding-top:2px;padding-bottom:2px" type="button" class="btn btn-danger center-block user" (click)="clearCaller()" >End Call </button>
-         
+
           <!-- for loop users -->
           <div *ngFor="let user of users" >
             <!-- 
-              onclick set this user in caller
-              and set class danger remove success
+              onclick check if caller == user
+              if caller if user
+              clearCaller
+              else
+              set this user in caller
+              and set class success remove default
 
               if click anther btn 
-              set class success remove danger
+              set anther user in caller
+              set class default remove success
               
              -->
             <button 
@@ -34,12 +36,13 @@
               }"
               class="btn  center-block user" 
               title='{{user.email}}' 
-              (click)='call(user)'
+              (click)='caller?._id == user._id ? clearCaller() : call(user)'
             >
               {{user.name}}
+             
               <!-- if user online -->
-              <span *ngIf="user.online"  class="glyphicon glyphicon-send text-success"></span>
-              <span *ngIf="!user.online"  class="glyphicon glyphicon-send"></span>
+              <span *ngIf="user.online" style="margin-left:5px" class="glyphicon glyphicon-send text-success"></span>
+              <span *ngIf="!user.online" style="margin-left:5px"  class="glyphicon glyphicon-send"></span>
             </button>
           </div>
         </div>

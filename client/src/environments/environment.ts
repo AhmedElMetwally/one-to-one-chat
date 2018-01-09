@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false ,
+  //  if server in dev
   url : 'http://localhost:3000'
 };

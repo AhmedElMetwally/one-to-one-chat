@@ -7,16 +7,17 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const Cors = require('cors');
 const mongoose = require('mongoose');
+const DatabaseUrl = app.get('env') == 'development' ? process.env.localDatabaseUrl : process.env.serverDatabaseUrl;
 require('dotenv').config()
 
 // app
 const app = express()
 
 // mongoose config
-// if server run in local set database in local
-// if server run in host server set datavbase in server
+// if server run in dev set database in localhost
+// if server run in prod server set datavbase in mlab server
 mongoose.Promise = require('bluebird');
-mongoose.connect( app.get('env') == 'development' ? process.env.localDatabaseUrl : process.env.serverDatabaseUrl )
+mongoose.connect( DatabaseUrl )
     .then(()=>console.log('connected to the database'))
     .catch(err=>console.log(err));
 

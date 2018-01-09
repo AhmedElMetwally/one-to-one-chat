@@ -1,4 +1,10 @@
 
+<!-- show error in signup -->
+<div *ngIf="ErrorAlert"  class="alert alert-danger">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Error</strong> Pleace Ckeck Your Date ... 
+</div>
+
 <form  role="form" [formGroup]='myform' (submit)='onSubmit()'>
   <!-- 
     set class error if formControlName us invalid
@@ -21,8 +27,13 @@
       formControlName='name'
       required   
     >
+    <!-- danger message -->
+    <small *ngIf="myform.controls.name.invalid && myform.controls.name.touched"  class="text-danger"> Must be 5-30 characters long</small>  
   </div>
-  
+
+
+
+
   <!-- 
     set class error if formControlName us invalid
     set class success if formControlName us valid
@@ -36,14 +47,17 @@
       "has-success" : myform.controls.email.valid
       }'
   >    
-    <label for="">Email</label>
+    <label for="" class="control-label">Email</label>
     <input 
-      type="text" 
+      type="email" 
       class="form-control" 
       placeholder="Email"
       formControlName='email'
       required   
-      email>
+      email
+    >
+    <!-- danger message -->
+    <small *ngIf="myform.controls.email.invalid && myform.controls.email.touched"  class="text-danger"> Must be Email</small> 
   </div>
 
   <!-- 
@@ -60,13 +74,16 @@
       }'
   >
     
-    <label for="">Password</label>
+    <label for="" class="control-label">Password</label>
     <input 
       type="password" 
       class="form-control" 
       placeholder="Password"
       formControlName='password'
-      required>
+      required
+    >
+    <!-- danger message -->
+    <small *ngIf="myform.controls.password.invalid && myform.controls.password.touched"  class="text-danger"> Must be 8-30 characters long</small> 
   </div>
 
   <button type="submit" [disabled]='myform.invalid'   class="btn btn-primary">Submit</button>

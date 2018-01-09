@@ -1,4 +1,11 @@
 
+<!-- show error in signup -->
+<div *ngIf="ErrorAlert"  class="alert alert-danger">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Signin Fail</strong> Pleace Ckeck Your Date ... 
+</div>
+
+
 <form  role="form" [formGroup]='myform' (submit)='onSubmit()'>
   <!-- 
     set class error if formControlName us invalid
@@ -12,15 +19,16 @@
       'has-success' : myform.controls.email.valid
     }" 
   >
-    <label for="">Email</label>
+    <label for="" class="control-label">Email</label>
     <input 
-      type="text" 
+      type="email" 
       class="form-control" 
       placeholder="Email"
       formControlName='email'
       required   
       email
-      >
+    >
+    <small *ngIf="myform.controls.email.invalid && myform.controls.email.touched"  class="text-danger"> Must be 5-30 characters long</small>  
   </div>
 
   <!-- 
@@ -35,14 +43,15 @@
       'has-success' : myform.controls.password.valid
     }"
   >
-    <label for="">Password</label>
+    <label for="" class="control-label">Password</label>
     <input 
       type="password" 
       class="form-control" 
       placeholder="Password"
       formControlName='password'
       required  
-      >
+    >
+    <small *ngIf="myform.controls.password.invalid && myform.controls.password.touched"  class="text-danger"> Must be 8-30 characters long</small>  
   </div>
   <!-- 
     submit is disabled if form invalid

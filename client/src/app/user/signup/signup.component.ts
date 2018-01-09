@@ -11,8 +11,14 @@ import { Iuser } from '../app.user';
 })
 export class SignupComponent implements OnInit {
   
+  // new signup form
   myform:FormGroup;
+
+  // new user to signup
   user:Iuser;
+
+  // to show alert of error
+  ErrorAlert:boolean = false;
 
   constructor(private _userService:UserService , private _router:Router) { }
 
@@ -33,6 +39,7 @@ export class SignupComponent implements OnInit {
         this.myform.reset()
         this._router.navigate(['/chat'])
       },( err ) =>{
+        this.ErrorAlert = true;
         console.log(err)
     });
   };

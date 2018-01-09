@@ -93,26 +93,23 @@ export class ChatComponent implements OnInit {
   // must click the user btn to run function call
   // push this msg in messages after sent it 
   sent(msg){
-    
-    if(!msg.value){
-      return false
+    if(msg.value){
+      this.io.emit('msg' , {
+        content : msg.value,
+        user : this.user,
+        caller : this.caller,
+        created : new Date().toISOString()
+      });
+
+      this.messages.push({
+        content : msg.value,
+        user : this.user,
+        caller : this.caller,
+        created : new Date().toISOString()
+      })
+
+      msg.value = '';
     }
-
-    this.io.emit('msg' , {
-      content : msg.value,
-      user : this.user,
-      caller : this.caller,
-      created : new Date().toISOString()
-    });
-
-    this.messages.push({
-      content : msg.value,
-      user : this.user,
-      caller : this.caller,
-      created : new Date().toISOString()
-    })
-
-    msg.value = '';
   };
   
   // call user
@@ -130,7 +127,6 @@ export class ChatComponent implements OnInit {
 
   // clear Call
   // clear messages
-  // hide class danger
   // hide form and messages
   clearCaller(){
     this.caller = null;
