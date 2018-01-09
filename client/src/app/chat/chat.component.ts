@@ -40,10 +40,11 @@ export class ChatComponent implements OnInit {
     // login in soketIo 
     // sent _id
     // socket.io update socketId in db 
+    this.io.emit('login' , this.token );
+
     // get all users  
     // get myuser from users
     // filter myuser form users
-    this.io.emit('login' , this.token );
     this.io.on('login' , users => {
       this.users = [];
       for(let i = 0 ; i < users.length ; i++){
@@ -82,9 +83,12 @@ export class ChatComponent implements OnInit {
       if(this.caller){
         if(this.caller._id == msg.user._id){
           this.messages.push(msg);
-        }
-      }
-    })
+        };
+      };
+    });
+
+    console.log('constrtor')
+    
   };
 
   // sent message on submit form

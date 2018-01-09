@@ -54,7 +54,7 @@ router.post('/signin' , function(req,res){
             res.status(401).json(err)
           })
     })
-})
+});
 
 // get messages
 router.get('/messages' , function(req,res){
@@ -79,5 +79,25 @@ router.get('/messages' , function(req,res){
     .then( messages =>{
       res.status(200).json(messages)
     })
+});
+
+// check if user in in DB
+// ckeck if this token is good
+router.get('/ckeck' , function(req,res){
+  User.findById(req.params._id)
+    .then(user =>{
+      jwt.verify(req.query.token , secret , function(err , decode){
+        if(err){
+          res.json({auth : false});
+        }else{
+          res.json({auth : true})
+        }   
+      })
+    })
+    .catch(err =>{
+      res.json({auth : false})
+      
+    })
 })
+
 module.exports = router;

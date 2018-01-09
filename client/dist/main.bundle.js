@@ -63,6 +63,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var AppComponent = (function () {
     function AppComponent(_userService) {
         this._userService = _userService;
+        // on open the app 
+        // ckeck if this app is have token
+        // if have token ckeck if this token is good
+        // ckeck token on open the app
+        // if not auth clear token and _id 
+        if (this._userService.isLogin()) {
+            this._userService.ckeckToken()
+                .subscribe(function (data) {
+                if (!data.auth) {
+                    localStorage.clear();
+                }
+            });
+        }
     }
     ;
     // ckeck if user login or not
@@ -332,10 +345,10 @@ var ChatComponent = (function () {
         // login in soketIo 
         // sent _id
         // socket.io update socketId in db 
+        this.io.emit('login', this.token);
         // get all users  
         // get myuser from users
         // filter myuser form users
-        this.io.emit('login', this.token);
         this.io.on('login', function (users) {
             _this.users = [];
             for (var i = 0; i < users.length; i++) {
@@ -375,8 +388,11 @@ var ChatComponent = (function () {
                 if (_this.caller._id == msg.user._id) {
                     _this.messages.push(msg);
                 }
+                ;
             }
+            ;
         });
+        console.log('constrtor');
     }
     ;
     // sent message on submit form
@@ -836,8 +852,19 @@ var UserService = (function () {
     ;
     // check Login 
     // with token
+    // with _id
     UserService.prototype.isLogin = function () {
-        return localStorage.getItem('token') !== null;
+        return localStorage.getItem('token') != null && localStorage.getItem('_id') != null;
+    };
+    ;
+    // this is run when open the app
+    // ckeck if user in DB
+    // ckeck if token is good
+    UserService.prototype.ckeckToken = function () {
+        var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]();
+        headers.append('Content-Type', 'application/json');
+        return this._http.get(__WEBPACK_IMPORTED_MODULE_0__environments_environment__["a" /* environment */].url + "/api/ckeck?token=" + localStorage.getItem('token') + "&&_id=" + localStorage.getItem('_id'), { headers: headers })
+            .map(function (res) { return res.json(); });
     };
     // login user
     // with token

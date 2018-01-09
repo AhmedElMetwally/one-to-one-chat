@@ -9,8 +9,19 @@ export class UserService {
 
   // check Login 
   // with token
+  // with _id
   isLogin() :boolean {
-    return  localStorage.getItem('token') !== null
+     return localStorage.getItem('token') != null && localStorage.getItem('_id') != null
+  };
+
+  // this is run when open the app
+  // ckeck if user in DB
+  // ckeck if token is good
+  ckeckToken(){
+    var headers = new Headers();
+    headers.append('Content-Type','application/json');
+    return this._http.get(`${environment.url}/api/ckeck?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
+      .map((res:Response) => res.json());
   }
 
   // login user
