@@ -47,9 +47,8 @@ module.exports = "\n<nav class=\"navbar navbar-default navbar-inverse\" role=\"n
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_user_service__ = __webpack_require__("../../../../../src/app/user/user.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_user_service__ = __webpack_require__("../../../../../src/app/user/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -61,26 +60,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-
 var AppComponent = (function () {
-    function AppComponent(_userService, _router) {
+    function AppComponent(_userService) {
         var _this = this;
         this._userService = _userService;
-        this._router = _router;
-        // on open the app 
+        // this function run one time on open the app
         // ckeck if this app is have token
-        // if have token ckeck if this token is good
-        // ckeck token on open the app
-        // if not auth clear token and _id 
+        // ckeck auth 
+        // if not auth 
+        // logout 
         if (this._userService.isLogin()) {
-            this._userService.ckeckToken()
+            this._userService.ckeckAuth()
                 .subscribe(function (data) {
-                if (!data.auth) {
-                    _this._router.navigate(['/user', 'signin']);
-                    localStorage.clear();
-                }
+                // user is auth
+            }, function (err) {
+                // user is not auth
+                _this._userService.Logout();
             });
         }
+        ;
     }
     ;
     // ckeck if user login or not
@@ -88,12 +86,12 @@ var AppComponent = (function () {
         return this._userService.isLogin();
     };
     AppComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["n" /* Component */])({
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
             selector: 'app-root',
             template: __webpack_require__("../../../../../src/app/app.component.html"),
             styles: [__webpack_require__("../../../../../src/app/app.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__user_user_service__["a" /* UserService */], __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__user_user_service__["a" /* UserService */]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -308,11 +306,12 @@ module.exports = "<h1 class=\"text-center hidden-xs\">Real Time Chat</h1>\n<h3 c
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChatComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_socket_io_client__ = __webpack_require__("../../../../socket.io-client/lib/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_socket_io_client___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_socket_io_client__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__chat_service__ = __webpack_require__("../../../../../src/app/chat/chat.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__user_user_service__ = __webpack_require__("../../../../../src/app/user/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_socket_io_client__ = __webpack_require__("../../../../socket.io-client/lib/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_socket_io_client___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_socket_io_client__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__chat_service__ = __webpack_require__("../../../../../src/app/chat/chat.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -326,12 +325,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ChatComponent = (function () {
-    function ChatComponent(_chatService) {
+    function ChatComponent(_chatService, _userService) {
         var _this = this;
         this._chatService = _chatService;
+        this._userService = _userService;
         // socket.io
-        this.io = __WEBPACK_IMPORTED_MODULE_1_socket_io_client__(__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].url);
+        this.io = __WEBPACK_IMPORTED_MODULE_2_socket_io_client__(__WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].url);
         // _id  
         // token
         // myuser
@@ -342,7 +343,7 @@ var ChatComponent = (function () {
         // get all messages of caller
         this.messages = [];
         // for loop nlineUser
-        // check if caller._id in onlineUser._id
+        // check if caller._id is in online User
         // if caller not online 
         // set caller = null
         // reset isConnect = false 
@@ -366,7 +367,7 @@ var ChatComponent = (function () {
             }
         });
         // refresh
-        // get all users online
+        // get all users 
         // filter myUser form online users
         // if thisUser is in caller
         // ckeckCallerIsOnline after this refresh
@@ -397,7 +398,13 @@ var ChatComponent = (function () {
             }
             ;
         });
-        console.log('constrtor');
+        // on any error in socket.io
+        // logout this user 
+        // to go user/signin
+        this.io.on('error', function (err) {
+            console.log(err);
+            _this._userService.Logout();
+        });
     }
     ;
     // sent message on submit form
@@ -460,12 +467,12 @@ var ChatComponent = (function () {
     ChatComponent.prototype.ngOnInit = function () { };
     ;
     ChatComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
             selector: 'app-chat',
             template: __webpack_require__("../../../../../src/app/chat/chat.component.html"),
             styles: [__webpack_require__("../../../../../src/app/chat/chat.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__chat_service__["a" /* ChatService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__chat_service__["a" /* ChatService */], __WEBPACK_IMPORTED_MODULE_0__user_user_service__["a" /* UserService */]])
     ], ChatComponent);
     return ChatComponent;
 }());
@@ -521,9 +528,8 @@ var ChatService = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogoutComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_service__ = __webpack_require__("../../../../../src/app/user/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_service__ = __webpack_require__("../../../../../src/app/user/user.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -535,27 +541,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-
 var LogoutComponent = (function () {
-    function LogoutComponent(_userService, _router) {
+    function LogoutComponent(_userService) {
         this._userService = _userService;
-        this._router = _router;
     }
     ;
     // logout user
-    // go to /user/signin
     LogoutComponent.prototype.logout = function () {
         this._userService.Logout();
-        this._router.navigate(['/user', 'signin']);
     };
     LogoutComponent.prototype.ngOnInit = function () {
     };
     LogoutComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'app-logout',
             template: "\n    <button type=\"button\" class=\"btn btn-danger\" (click)=\"logout()\">Logout</button>\n  "
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__user_service__["a" /* UserService */], __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__user_service__["a" /* UserService */]])
     ], LogoutComponent);
     return LogoutComponent;
 }());
@@ -616,7 +618,6 @@ var SigninComponent = (function () {
         this._userService.signinUser(this.user).subscribe(function (user) {
             _this._userService.Login(user.token, user._id);
             _this.myform.reset();
-            _this._router.navigate(['/chat']);
         }, function (err) {
             _this.ErrorAlert = true;
             console.log(err);
@@ -697,7 +698,6 @@ var SignupComponent = (function () {
         this._userService.signupUser(this.user).subscribe(function (user) {
             _this._userService.Login(user.token, user._id);
             _this.myform.reset();
-            _this._router.navigate(['/chat']);
         }, function (err) {
             _this.ErrorAlert = true;
             console.log(err);
@@ -833,10 +833,11 @@ var UserRouter = [
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/map.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -850,9 +851,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var UserService = (function () {
-    function UserService(_http) {
+    function UserService(_http, _router) {
         this._http = _http;
+        this._router = _router;
     }
     ;
     // check Login 
@@ -865,42 +868,46 @@ var UserService = (function () {
     // this is run when open the app
     // ckeck if user in DB
     // ckeck if token is good
-    UserService.prototype.ckeckToken = function () {
-        var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]();
+    UserService.prototype.ckeckAuth = function () {
+        var headers = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
         headers.append('Content-Type', 'application/json');
-        return this._http.get(__WEBPACK_IMPORTED_MODULE_0__environments_environment__["a" /* environment */].url + "/api/ckeck?token=" + localStorage.getItem('token') + "&&_id=" + localStorage.getItem('_id'), { headers: headers })
+        return this._http.get(__WEBPACK_IMPORTED_MODULE_1__environments_environment__["a" /* environment */].url + "/api/ckeck?token=" + localStorage.getItem('token') + "&&_id=" + localStorage.getItem('_id'), { headers: headers })
             .map(function (res) { return res.json(); });
     };
     // login user
     // with token
     // with _id
+    // go to chat
     UserService.prototype.Login = function (token, _id) {
         localStorage.setItem('token', token);
         localStorage.setItem('_id', _id);
+        this._router.navigate(['/chat']);
     };
     // clear localStorage 
+    // go to signin
     UserService.prototype.Logout = function () {
         localStorage.clear();
+        this._router.navigate(['/user', 'signin']);
     };
     // signup user with user interface Iuser
     // return token and user with _id
     UserService.prototype.signupUser = function (user) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
         headers.append('Content-Type', 'application/json');
-        return this._http.post(__WEBPACK_IMPORTED_MODULE_0__environments_environment__["a" /* environment */].url + '/api/signup', user, { headers: headers })
+        return this._http.post(__WEBPACK_IMPORTED_MODULE_1__environments_environment__["a" /* environment */].url + '/api/signup', user, { headers: headers })
             .map(function (res) { return res.json(); });
     };
     // signin user with email & password
     // return token and user with _id
     UserService.prototype.signinUser = function (user) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_http__["a" /* Headers */]();
+        var headers = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
         headers.append('Content-Type', 'application/json');
-        return this._http.post(__WEBPACK_IMPORTED_MODULE_0__environments_environment__["a" /* environment */].url + '/api/signin', user, { headers: headers })
+        return this._http.post(__WEBPACK_IMPORTED_MODULE_1__environments_environment__["a" /* environment */].url + '/api/signin', user, { headers: headers })
             .map(function (res) { return res.json(); });
     };
     UserService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]])
+        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */], __WEBPACK_IMPORTED_MODULE_0__angular_router__["a" /* Router */]])
     ], UserService);
     return UserService;
 }());

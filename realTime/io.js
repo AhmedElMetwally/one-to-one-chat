@@ -18,7 +18,7 @@ module.exports =  io => {
         // sent all users and online true or false
         socket.on('login' , token  =>  { 
             jwt.verify( token , secret , (err , decode )=>{
-                if( !err ){
+                if( ! err ){
                     User.update({_id : decode.user._id} , {socketId : socket.id})
                         .then(res => {
                             User.find({})
@@ -38,11 +38,11 @@ module.exports =  io => {
                                     io.emit('login' ,  _users)
                                 })
                                 .catch(err => {
-                                    // io.emit('login' ,  false)
+                                    io.emit('error' ,  'error DB find Users on event login')
                                 })
                         })
                         .catch(err => {
-                            // io.emit('login' ,  false)
+                            io.emit('error' ,  'error DB update socketId on event login')
                         })
                 };
             });
@@ -73,7 +73,7 @@ module.exports =  io => {
                     io.emit('refresh' ,  _users)
                 })
                 .catch(err => {
-                    // io.emit('refresh' ,  false)
+                    io.emit('error' ,  'error DB find Users on event disconnect')
                 })
         })
 
@@ -96,11 +96,11 @@ module.exports =  io => {
                         caller : msg.caller._id
                     });
                     message.save()
-                        .then( () => {
+                        .then(() => {
                             // console.log('save msg')
                         })
                         .catch( err => {
-                            // console.log('Error save msg')
+                            io.emit('error' ,  'error DB save msg on event msg')
                         })
                 }
             ])

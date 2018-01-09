@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { UserService } from './user/user.service';
 import { Component } from '@angular/core';
 
@@ -8,22 +7,26 @@ import { Component } from '@angular/core';
   styleUrls : ['app.component.css']
 })
 export class AppComponent {
-  constructor(private _userService:UserService , private _router:Router){
+  constructor(private _userService:UserService  ){
     
-    // on open the app 
+    // this function run one time on open the app
     // ckeck if this app is have token
-    // if have token ckeck if this token is good
-    // ckeck token on open the app
-    // if not auth clear token and _id 
+    // ckeck auth 
+    // if not auth 
+    // logout 
     if(this._userService.isLogin()){
-      this._userService.ckeckToken()
+      this._userService.ckeckAuth()
       .subscribe(data => {
-        if(!data.auth){
-          this._router.navigate(['/user' , 'signin']);
-          localStorage.clear();
-        }
-      })
-    }
+          // user is auth
+        },
+        err =>{
+          // user is not auth
+          this._userService.Logout()
+        });
+    };
+   
+    
+    
   };
 
   // ckeck if user login or not

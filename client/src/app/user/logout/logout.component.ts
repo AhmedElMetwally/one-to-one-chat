@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 
@@ -10,12 +9,10 @@ import { UserService } from '../user.service';
 })
 export class LogoutComponent implements OnInit {
 
-  constructor(private _userService:UserService ,  private _router:Router) { };
+  constructor(private _userService:UserService ) { };
   // logout user
-  // go to /user/signin
   logout(){
     this._userService.Logout();
-    this._router.navigate(['/user' , 'signin' ]);
   }
 
   ngOnInit() {

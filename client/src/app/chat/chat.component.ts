@@ -36,7 +36,7 @@ export class ChatComponent implements OnInit {
 
 
 
-  constructor(private _chatService:ChatService) {
+  constructor(private _chatService:ChatService , private _userService:UserService) {
     // login in soketIo 
     // sent _id
     // socket.io update socketId in db 
@@ -57,7 +57,7 @@ export class ChatComponent implements OnInit {
     });
 
     // refresh
-    // get all users online
+    // get all users 
     // filter myUser form online users
     // if thisUser is in caller
     // ckeckCallerIsOnline after this refresh
@@ -87,8 +87,17 @@ export class ChatComponent implements OnInit {
       };
     });
 
-    console.log('constrtor')
     
+    // on any error in socket.io
+    // logout this user 
+    // to go user/signin
+    this.io.on('error' , err => {
+      console.log(err);
+      this._userService.Logout();
+    })
+
+
+
   };
 
   // sent message on submit form
@@ -139,7 +148,7 @@ export class ChatComponent implements OnInit {
 
   
   // for loop nlineUser
-  // check if caller._id in onlineUser._id
+  // check if caller._id is in online User
   // if caller not online 
   // set caller = null
   // reset isConnect = false 

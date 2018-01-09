@@ -35,7 +35,6 @@ export class SigninComponent implements OnInit {
     this._userService.signinUser(this.user).subscribe( user =>{
       this._userService.Login(user.token , user._id)
       this.myform.reset();
-      this._router.navigate(['/chat'])
     },(err) =>{
       this.ErrorAlert = true;
       console.log(err) 

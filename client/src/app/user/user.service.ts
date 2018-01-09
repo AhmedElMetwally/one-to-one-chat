@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { Iuser } from './app.user';
 import { Injectable } from '@angular/core';
@@ -5,7 +6,7 @@ import { Http , Headers , Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 @Injectable()
 export class UserService {
-  constructor(private _http:Http) {};
+  constructor(private _http:Http , private _router:Router) {};
 
   // check Login 
   // with token
@@ -17,7 +18,7 @@ export class UserService {
   // this is run when open the app
   // ckeck if user in DB
   // ckeck if token is good
-  ckeckToken(){
+  ckeckAuth(){
     var headers = new Headers();
     headers.append('Content-Type','application/json');
     return this._http.get(`${environment.url}/api/ckeck?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
@@ -27,14 +28,18 @@ export class UserService {
   // login user
   // with token
   // with _id
+  // go to chat
   Login(token , _id) :void {
-    localStorage.setItem('token' , token)
-    localStorage.setItem('_id' , _id)
+    localStorage.setItem('token' , token);
+    localStorage.setItem('_id' , _id);
+    this._router.navigate(['/chat'])
   }
 
   // clear localStorage 
+  // go to signin
   Logout():void{
     localStorage.clear();
+    this._router.navigate(['/user' , 'signin']);
   }
 
   // signup user with user interface Iuser

@@ -86,22 +86,23 @@ router.get('/messages' , function(req,res){
 router.get('/ckeck' , function(req,res){
   User.findById(req.query._id)
     .then(user =>{
-      if(user){
-        jwt.verify(req.query.token , secret , function(err , decode){
-          if(err){
-            res.json({auth : false});
-          }else{
-            res.json({auth : true})
-          }   
-        })
-      }else{
-        res.json({auth : false})
-      }
+      jwt.verify(req.query.token , secret , function(err , decode){
+        if(err){
+          // token is not goog
+          res.status(401).json({auth : false});
+        }else{
+          // _id and token is goog
+          res.status(200).json({auth : true})
+        }   
+      })
     })
     .catch(err =>{
-      res.json({auth : false})
+      // _id err
+      // user not in DB
+      res.status(401).json({auth : false})
       
     })
 })
 
+ 
 module.exports = router;
