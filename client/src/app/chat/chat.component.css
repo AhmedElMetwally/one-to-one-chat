@@ -1,0 +1,40 @@
+button.user{
+    min-width: 80%;
+    padding: 10px 10px;
+    margin-top: 14px ;
+}
+
+.messages{
+    padding: 10px;
+    max-height: 200px;
+    min-height: 200px;
+    overflow-y: auto;
+}
+
+.users{
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.messages .msg{
+    background: #424242;
+    color: white;
+    font-size: 15px;
+    border-radius: 8px;
+    padding: 5px 15px;
+    width: 70%;
+    word-break: break-all;
+    
+}
+
+.messages .msg.me{
+    margin-left: 30%;
+    text-align: right;
+}
+
+.messages .date{
+    color: whitesmoke;
+    font-size: 10px;
+    padding-top: 12px;
+}
+ 

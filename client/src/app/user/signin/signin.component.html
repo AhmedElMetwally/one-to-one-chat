@@ -1,0 +1,51 @@
+
+<form  role="form" [formGroup]='myform' (submit)='onSubmit()'>
+  <!-- 
+    set class error if formControlName us invalid
+    set class success if formControlName us valid
+
+    Validator [email , required] in html only
+  -->
+  <div class="form-group has-feedback" 
+    [ngClass]="{
+      'has-error' : myform.controls.email.invalid && myform.controls.email.touched ,
+      'has-success' : myform.controls.email.valid
+    }" 
+  >
+    <label for="">Email</label>
+    <input 
+      type="text" 
+      class="form-control" 
+      placeholder="Email"
+      formControlName='email'
+      required   
+      email
+      >
+  </div>
+
+  <!-- 
+    set class error if formControlName us invalid
+    set class success if formControlName us valid
+
+    Validator [required] in html only
+  -->
+  <div class="form-group has-feedback" 
+    [ngClass]="{
+      'has-error' : myform.controls.password.invalid && myform.controls.password.touched ,
+      'has-success' : myform.controls.password.valid
+    }"
+  >
+    <label for="">Password</label>
+    <input 
+      type="password" 
+      class="form-control" 
+      placeholder="Password"
+      formControlName='password'
+      required  
+      >
+  </div>
+  <!-- 
+    submit is disabled if form invalid
+  -->
+  <button type="submit" [disabled]='myform.invalid'  class="btn btn-primary">Submit</button>
+</form>
