@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "oneToOneChat",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -24,5 +24,14 @@
   "engines": {
     "node" : "8.9.3",
     "npm" : "3.10.10"
+  },
+  "author": {
+    "name": "Ahmed ElMetwally",
+    "email": "carawanbaik77@gmail.com",
+    "url": "http://one-to-one-chat.herokuapp.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AhmedElMetwally/one-to-one-chat.git"
   }
 }
