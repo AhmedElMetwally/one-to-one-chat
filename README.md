@@ -4,7 +4,7 @@
 </h2>
 
 <h3  align="center">
-    <a target='_blank' href="https://angular-search-github.herokuapp.com">
+    <a target='_blank' href="https://one-to-one-chat.herokuapp.com">
         One To One Real Time Chat 
     </a>
 </h3>
