@@ -14,12 +14,15 @@ router.get('/messages' , function(req,res){
   // get all messages 
   // if user is user   , caller is caller
   // if user is caller , caller is user
+  // replace caller and user with his doc
   Message.find({
     $or:[
       {user : userId , caller : callerId},
       {user : callerId , caller : userId}
     ]
     })
+    .populate('user')
+    .populate('caller')
     .exec()
     .then( messages =>{
       res.status(200).json(messages)
