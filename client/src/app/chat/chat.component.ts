@@ -32,48 +32,31 @@ export class ChatComponent implements OnInit {
   // get all messages of caller
   messages:Imsg[] = [];
 
+  // new message
+  newMessage:Imsg;
+
   
 
 
 
   constructor(private _chatService:ChatService , private _userService:UserService) {
-    // login in soketIo 
-    // sent _id
-    // socket.io update socketId in db 
-    this.io.emit('login' , this.token );
 
-    // get all users  
-    // get myuser from users
-    // filter myuser form users
-    this.io.on('login' , users => {
-      this.users = [];
-      for(let i = 0 ; i < users.length ; i++){
-        if(users[i]._id == this._id){
-          this.user = users[i];
-        }else{
-          this.users.push(users[i])
-        }
-      }
+    // login socket.io
+    // check token
+    // update socketId
+    // get thisUser 
+    this.io.emit('login' , this.token );
+    this.io.on('login' , data => {
+      console.log('login');
+      this.user = data.user
     });
 
-    // refresh
     // get all users 
-    // filter myUser form online users
-    // if thisUser is in caller
-    // ckeckCallerIsOnline after this refresh
-    this.io.on('refresh' , users =>{
+    // filter thisUser
+    this.io.on('refresh' , data =>{
+      console.log('refresh');
       this.users = [];
-      for(let i = 0 ; i < users.length ; i++){
-        if(users[i]._id == this._id){
-          this.user = users[i];
-        }else{
-          this.users.push(users[i])
-        }
-      }
-      if(this.caller){
-        this.ckeckCallerIsOnline();
-      }
-      console.log('refresh onlineUsers');
+      this.users = data.users.filter( u => u._id != this._id);
     });
 
     // on new msg
@@ -100,36 +83,26 @@ export class ChatComponent implements OnInit {
 
   };
 
+
   // sent message on submit form
   // content - caller  - user._id
-  // import to caller
-  // must click the user btn to run function call
   // push this msg in messages after sent it 
-  sent(msg){
-    if(msg.value){
-      this.io.emit('msg' , {
-        content : msg.value,
-        user : this.user,
-        caller : this.caller,
-        created : new Date().toISOString()
-      });
-
-      this.messages.push({
-        content : msg.value,
-        user : this.user,
-        caller : this.caller,
-        created : new Date().toISOString()
-      })
-
-      msg.value = '';
-    }
+  sent(msg):void{
+    this.newMessage = {
+      content : msg.value,
+      user : this.user,
+      caller : this.caller,
+      created : new Date().toISOString()
+    };
+    this.messages.push(this.newMessage);
+    this.io.emit('msg' , this.newMessage);
   };
   
   // call user
   // set caller in this.caller to sent and get the messages
   // show form 
   // replace all messages to his messages
-  call(caller){
+  call(caller):void{
     this.caller = caller;
     this.messages = [];
     this._chatService.getMessages( this._id  , caller._id)
@@ -141,31 +114,10 @@ export class ChatComponent implements OnInit {
   // clear Call
   // clear messages
   // hide form and messages
-  clearCaller(){
+  clearCaller():void{
     this.caller = null;
     this.messages = [];
   };
-
-  
-  // for loop nlineUser
-  // check if caller._id is in online User
-  // if caller not online 
-  // set caller = null
-  // reset isConnect = false 
-  isConnect:boolean = false;
-  ckeckCallerIsOnline(){
-    for(var i = 0 ; i < this.users.length ; i++){
-      if( this.users[i]._id == this.caller._id && this.users[i].online ){
-        this.isConnect = true;
-        break;
-      }
-    }
-    if(!this.isConnect){
-      this.caller = null
-    }
-    
-    this.isConnect = false;
-  }
 
   ngOnInit(){};
 

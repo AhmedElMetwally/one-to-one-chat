@@ -18,11 +18,19 @@ export class UserService {
   // this is run when open the app
   // ckeck if user in DB
   // ckeck if token is good
-  ckeckAuth(){
+  ckeckAuth():void{
     var headers = new Headers();
     headers.append('Content-Type','application/json');
-    return this._http.get(`${environment.url}/api/ckeck?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
-      .map((res:Response) => res.json());
+    this._http.get(`${environment.url}/api/ckeckAuth/?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
+      .map((res:Response) => res.json())
+      .subscribe(data => {
+        // auth is good
+      },
+      err =>{
+        // auth is bad
+        this.Logout();
+      });
+
   }
 
   // login user

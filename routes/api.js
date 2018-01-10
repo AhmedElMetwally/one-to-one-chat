@@ -17,10 +17,14 @@ router.post('/signup', function(req, res, next){
   user.save()
     .then(_user => {
       jwt.sign({user : _user} , secret , { expiresIn: '24h' } , function(err , token){
-        res.status(200).json({
-          token : token , 
-          _id : _user._id
-        })
+        if(err){
+          res.status(401).json();
+        }else{
+          res.status(200).json({
+            token : token , 
+            _id : _user._id
+          })
+        }
       })
     })
 });
@@ -35,10 +39,6 @@ router.post('/signin' , function(req,res){
   
   User.findOne({email : req.body.email})
     .then( user => {
-        if(!user){
-          res.status(401).json(new Error())
-          return false
-        }
         user.comparePassword( req.body.password )
           .then( isMatch => {
             if(isMatch){
@@ -51,7 +51,7 @@ router.post('/signin' , function(req,res){
             }
           })
           .catch(err => {
-            res.status(401).json(err)
+            res.status(401).json();
           })
     })
 });
@@ -70,7 +70,7 @@ router.get('/messages' , function(req,res){
   Message.find({
     $or:[
       {user : userId , caller : callerId},
-      {user : callerId , caller : userId},
+      {user : callerId , caller : userId}
     ]
     })
     .populate('user')
@@ -78,29 +78,34 @@ router.get('/messages' , function(req,res){
     .exec()
     .then( messages =>{
       res.status(200).json(messages)
+    }).catch(err => {
+      res.status(401).json();
     })
 });
 
 // check if user in in DB
 // ckeck if this token is good
-router.get('/ckeck' , function(req,res){
-  User.findById(req.query._id)
+router.get('/ckeckAuth' , function(req,res){
+  User.findOne({ _id :req.query._id})
     .then(user =>{
-      jwt.verify(req.query.token , secret , function(err , decode){
-        if(err){
-          // token is not goog
-          res.status(401).json({auth : false});
-        }else{
-          // _id and token is goog
-          res.status(200).json({auth : true})
-        }   
-      })
+      if(user){
+        jwt.verify(req.query.token , secret , function(err , decode){
+          if(err){
+            // token is not good
+            res.status(401).json({auth : false});
+          }else{
+            // _id and token is good
+            res.status(200).json({auth : true})
+          }   
+        })
+      }else{
+        // user not in DB
+        res.status(401).json({auth : false});
+      }
     })
     .catch(err =>{
-      // _id err
       // user not in DB
       res.status(401).json({auth : false})
-      
     })
 })
 

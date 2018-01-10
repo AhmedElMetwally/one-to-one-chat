@@ -16,13 +16,6 @@ export class AppComponent {
     // logout 
     if(this._userService.isLogin()){
       this._userService.ckeckAuth()
-      .subscribe(data => {
-          // user is auth
-        },
-        err =>{
-          // user is not auth
-          this._userService.Logout()
-        });
     };
    
     

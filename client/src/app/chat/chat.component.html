@@ -11,7 +11,7 @@
       <div class="col-md-3"  >
   
         <!-- check if users -->
-        <div *ngIf="users.length" class="users" >
+        <div *ngIf="users" class="users" >
 
           <!-- for loop users -->
           <div *ngFor="let user of users" >
@@ -31,15 +31,15 @@
             <button 
               [ngClass]=
               "{
-                'btn-success' : user.socketId == caller?.socketId, 
-                'btn-default' : user.socketId != caller?.socketId  
+                'btn-success' : user._id == caller?._id, 
+                'btn-default' : user._id != caller?._id  
               }"
               class="btn  center-block user" 
               title='{{user.email}}' 
-              (click)='caller?._id == user._id ? clearCaller() : call(user)'
+              (click)='user._id == caller?._id ? clearCaller() : call(user)'
             >
               {{user.name}}
-             
+           
               <!-- if user online -->
               <span *ngIf="user.online" style="margin-left:5px" class="glyphicon glyphicon-send text-success"></span>
               <span *ngIf="!user.online" style="margin-left:5px"  class="glyphicon glyphicon-send"></span>
@@ -78,7 +78,7 @@
                 use undefind proparty to hide date
                 on click convert this proparty 
               -->
-              <span class="date" [hidden]='!message.showDate'>
+              <span class="date"  [hidden]='!message.showDate'>
                   {{message.created | date:'medium'}}
               </span>
             </p>
@@ -91,7 +91,7 @@
         <br>
         
         <!-- form sent message -->
-        <form method="post" (submit)='sent(msg)'>
+        <form method="post" (submit)='msg.value ? sent(msg) : false; msg.value=""; '>
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Message...." #msg >
             <div class="input-group-btn">
