@@ -56,7 +56,7 @@ export class ChatService {
 
   // sent new msg
   SocketIo_SentMsg(msg:Imsg):void{
-    this.io.emit('msg' , msg );
+    this.io.emit('msg' , msg);
   };
 
 

@@ -88,13 +88,12 @@ module.exports =  io => {
                 .then(users =>{
                     var _users = [];
                     for(let i = 0 ; i < users.length ;  i++){
-                        let user = Object.assign({}, users[i] ); // clone of opject {{fix js}}
-                        if(Object.keys(io.sockets.sockets).indexOf(user.socketId) > -1){
-                            user.online = true;
-                            _users.push(user);
+                        if(Object.keys(io.sockets.sockets).indexOf(users[i].socketId) > -1){
+                            users[i].online = true;
+                            _users.push(users[i]);
                         }else{
-                            user.online = false;
-                            _users.push(user);
+                            users[i].online = false;
+                            _users.push(users[i]);
                         }
                     }
                     // sent updated user to thisUser

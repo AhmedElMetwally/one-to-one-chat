@@ -29,7 +29,7 @@ export class AuthService {
     ckeckAuth():void{
         var headers = new Headers();
         headers.append('Content-Type','application/json');
-        this._http.get(`${environment.url}/users/ckeckAuth/?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
+        this._http.get(`${environment.url}/users/ckeckAuth?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
             .map((res:Response) => res.json())
             .subscribe(data => {
                 // auth is good

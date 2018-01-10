@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
   styleUrls : ['chat.component.css']
 })
 export class ChatComponent implements OnInit {
+  _id: string = localStorage.getItem('_id');
   user: Iuser;
   users:Iuser[] = [];
   caller:Iuser ;
@@ -82,7 +83,7 @@ export class ChatComponent implements OnInit {
   // get all messages of thisUser and caller
   call(caller):void{
     this.caller = caller;
-    this._chatService.getMessages( localStorage.getItem('_id')  , caller._id)
+    this._chatService.getMessages( this._id , caller._id)
       .subscribe(messages => {
         this.messages = messages;
       })
