@@ -1,9 +1,9 @@
-import { Imsg } from './chat.msg';
-import { UserService } from './../user/user.service';
-import { Iuser } from './../user/app.user';
+import { Iuser } from './../Iuser';
+import { ChatService } from './../service/chat.service';
+import { AuthService } from './../service/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { ChatService } from './chat.service';
 import { environment } from '../../environments/environment';
+
 
 @Component({
   selector: 'app-chat',
@@ -11,113 +11,91 @@ import { environment } from '../../environments/environment';
   styleUrls : ['chat.component.css']
 })
 export class ChatComponent implements OnInit {
-  
-  io = this._chatService.io;
-
-  
-  // _id  
-  // token
-  // myuser
-  _id : string  = localStorage.getItem('_id');
-  token : string = localStorage.getItem('token');
   user: Iuser;
-
-  // all users filter thisUser
   users:Iuser[] = [];
-
-  // caller 
   caller:Iuser ;
-  
-  // all messages of caller
-  messages:Imsg[] = [];
+  messages:any[] = [];
 
-  // new message
-  newMessage:Imsg;
+  constructor(  
+    private _chatService:ChatService,
+    private _authService:AuthService ){
 
 
-  constructor(private _chatService:ChatService , private _userService:UserService) {
+    // login in socket io
+    // sent token 
+    // update socketId in user DB
+    // get thisUser
+    this._chatService.socketIO_login( localStorage.getItem('token') )
+      .subscribe( user => {
+        this.user = user;
+      })
 
-    // login socket.io
-    // check token
-    // update socketId
-    // get thisUser 
-    this.io.emit('login' , this.token );
-    this.io.on('login' , data => {
-      console.log('login');
-      this.user = data.user;
-    });
 
-    // get all users 
-    // filter thisUser
-    this.io.on('refresh' , data =>{
-      console.log('refresh');
-      console.log(data.users);
-      this.users = [];
-      this.users = data.users.filter( u => u._id != this._id);
-    });
+    // on refresh event ( ant socket connect or disconnect)
+    this._chatService.socketIO_refresh()
+      .subscribe( users => {
+        this.users = users;
+      })
 
-    // on new msg
-    // check if caller
-    // ckeck if msg.callerId is userId
-    this.io.on('msg' , msg => {
-      if(this.caller){
-        if(this.caller._id == msg.user._id){
-          this.messages.push(msg);
-        };
-      };
-    });
+
+    // if thisUser receive the msg
+    // ckeck if caller of this msg  == this.caller
+    // push it in messages to display
+    this._chatService.SocketIo_GetMsg()
+      .subscribe( msg => {
+        if(this.caller){
+          // if this msg to his caller
+          if(this.caller._id == msg.user._id){
+            this.messages.push(msg);
+          } 
+        }
+      })
+
+
+    // if any error from socket
+    // display it on console
+    // logout
+    this._chatService.SocketIO_error()
+      .subscribe(err => {
+        console.log(err)
+        this._authService.Logout();
+      });
     
-    // on any error in socket.io
-    // logout this user 
-    // to go user/signin
-    this.io.on('error' , err => {
-      console.log(err);
-      this._userService.Logout();
-    });
-
-
 
   };
 
 
-  // sent message on submit form
-  // content - caller  - user._id
-  // push this msg in messages after sent it 
-  sent(msg):void{
-    this.newMessage = {
-      content : msg.value,
+  // push this msg in messages to display
+  // sent new msg to caller
+  sent(content):void{
+    let msg = {
+      content : content,
       user : this.user,
       caller : this.caller,
       created : new Date().toISOString()
-    };
-    this.messages.push(this.newMessage);
-    this.io.emit('msg' , this.newMessage);
+    }
+    this._chatService.io.emit('msg' ,msg);
+    this.messages.push(msg);
   };
   
-  // call user
-  // set caller in this.caller to sent and get the messages
-  // show form 
-  // replace all messages to his messages
+  // set this user in caller
+  // get all messages of thisUser and caller
   call(caller):void{
     this.caller = caller;
-    this.messages = [];
-    this._chatService.getMessages( this._id  , caller._id)
+    this._chatService.getMessages( localStorage.getItem('_id')  , caller._id)
       .subscribe(messages => {
         this.messages = messages;
       })
   };
 
-  // clear Call
-  // clear messages
-  // hide form and messages
+  // end the call 
+  // delete caller
+  // delete messages
   clearCaller():void{
     this.caller = null;
     this.messages = [];
   };
 
-  ngOnInit(){
-
-  };
+  ngOnInit(){};
 
 }
-

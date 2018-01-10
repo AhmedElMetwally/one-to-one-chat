@@ -1,10 +1,11 @@
 export interface Iuser{
-    name?: string;
-    email : string;
-    password : string;
     _id?:string;
+    name?: string;
+    email?: string;
+    password?: string;
     socketId?:string;
     online?:boolean;
-}
-
-
+  }
+  
+  
+  

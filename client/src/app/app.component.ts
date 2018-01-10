@@ -1,30 +1,24 @@
-import { UserService } from './user/user.service';
+import { AuthService } from './service/auth.service';
 import { Component } from '@angular/core';
+
+
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls : ['app.component.css']
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
-  constructor(private _userService:UserService  ){
-    
-    // this function run one time on open the app
-    // ckeck if this app is have token
-    // ckeck auth 
-    // if not auth 
-    // logout 
-    if(this._userService.isLogin()){
-      this._userService.ckeckAuth()
+  constructor(
+    private _authService:AuthService  ){
+      // on open this app
+      // ckeck auth  
+      if(this._authService.isLogin()){
+        this._authService.ckeckAuth()
+      };
     };
-   
-    
-    
-  };
 
-  // ckeck if user login or not
   isLogin():boolean{
-    return this._userService.isLogin();
+    return this._authService.isLogin();
   }
 
 }

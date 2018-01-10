@@ -91,9 +91,9 @@
         <br>
         
         <!-- form sent message -->
-        <form method="post" (submit)='msg.value ? sent(msg) : false; msg.value=""; '>
+        <form method="post" (submit)='content.value ? sent(content.value) : false; content.value=""; '>
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Message...." #msg >
+            <input type="text" class="form-control" placeholder="Message...." #content >
             <div class="input-group-btn">
               <button class="btn btn-primary" type="submit">Sent</button>
             </div>

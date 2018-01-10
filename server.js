@@ -44,7 +44,9 @@ app.use(express.static(path.join(__dirname, 'client/dist')));
 
 // routers
 const api = require('./routes/api');
+const users = require('./routes/users');
 app.use('/api', api);
+app.use('/users', users);
 
 // index.html
 app.get('*' , function(req,res){

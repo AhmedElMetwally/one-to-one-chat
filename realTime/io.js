@@ -8,65 +8,80 @@ const secret = process.env.secret;
 module.exports =  io => {
     io.on('connection', socket => {
 
-
-        // event login
-        // get token and ckeck it
-        // update socketId of thisUser
-        // get all usersc
-        // sent to thisUser his user opject
-        // get all users and add online [true | false]
-        // sent to all users to all users
+        // on event login
+        // get token
+        // sent decode
+        // update user socketId and sent Updated user
+        // get all users
+        // ckeck if any user online (true , false)
+        // sent updated user to thisUser (event login)
+        // sent all users(online : true , false) to all users (event refresh)
+        // if any error emit event error to thisUser
         socket.on('login' , token  =>  { 
-            jwt.verify( token , secret , (err , decode )=>{
-                if(err){
-                    socket.emit('error' ,  'error token on event login')
-                }else{
-                    async.waterfall([
-                        cb => {
-                            User.findByIdAndUpdate({_id : decode.user._id} , {socketId : socket.id} ,  {new: true})
-                                .lean() // this is very import to change Property in mongoose 
-                                .then( _user => {
-                                    cb(null , _user)
-                                })
-                                .catch(err => {
-                                    socket.emit('error' ,  'error DB update socketId on event login {findByIdAndUpdate}')
-                                    cb(err)
-                                })
-                        },
-                        (_user , cb ) => {
-                            User.find({})
-                                .lean() // this is very import to change Property in mongoose 
-                                .then(users =>{
-                                    var _users = [];
-                                    for(let i = 0 ; i < users.length ;  i++){
-                                        let user = Object.assign({}, users[i] ); // clone of opject {{fix js}}
-                                        if(Object.keys(io.sockets.sockets).indexOf(user.socketId) > -1){
-                                            user.online = true;
-                                            _users.push(user);
-                                        }else{
-                                            user.online = false;
-                                            _users.push(user);
-                                        }
-                                    }
-                                    socket.emit('login' ,  {user : _user});
-                                    io.emit('refresh' , {users:_users});
-                                })
-                                .catch(err => {
-                                    socket.emit('error' ,  'error DB find Users on event login')
-                                })
-                        }
-                    ]);
+            async.waterfall([
+                
+                // token
+                cb => {
+                    jwt.verify( token , secret , (err , decode )=>{
+                        cb(err , decode)
+                    })
+                },
 
-                };
+                // update user socketId
+                ( decode , cb ) => {
+                    User.findByIdAndUpdate({_id : decode.user._id} , {socketId : socket.id} ,  {new: true})
+                        .lean() // this is very import to change Property in mongoose 
+                        .then( _user => {
+                            cb(null , _user);
+                        })
+                        .catch(err => {
+                            cb(err);
+                        });
+                },
+                
+                // get all users
+                ( _user , cb ) => {
+                    User.find({})
+                        .lean() // this is very import to change Property in mongoose 
+                        .then(users =>{
+                            var _users = [];
+                            for(let i = 0 ; i < users.length ;  i++){
+                                if(Object.keys(io.sockets.sockets).indexOf(users[i].socketId) > -1){
+                                    users[i].online = true;
+                                    _users.push(users[i]);
+                                }else{
+                                    users[i].online = false;
+                                    _users.push(users[i]);
+                                };
+                            };
+
+                            // sent updated user to thisUser
+                            socket.emit('login' ,  {user : _user});
+
+                            // sent all updated users to all users
+                            io.emit('refresh' , {users:_users});
+                        })
+                        .catch(err => {
+                            cb(err)
+                        });
+                }
+
+                // if cb(err) 
+                // sent error to thisUser in _authService.SocketIO_error()
+            ] , (err) => { 
+                socket.emit('error' ,  {err : err , event : 'login'});
             });
+
         })
 
 
-        // start refresh
-        // on disconnect any user
-        // get all users from DB
-        // set online true or false
-        // set all users to all users
+
+
+        
+        // if any user disconnect
+        // emit refresh event
+        // sent all users(online: true , false) to all users
+        // if any error  sent this error to thisUser
         socket.on('disconnect' , () => {  
             User.find({})
                 .lean() // this is very import to change Property in mongoose 
@@ -82,21 +97,18 @@ module.exports =  io => {
                             _users.push(user);
                         }
                     }
-                    // emit all users to all users
+                    // sent updated user to thisUser
                     io.emit('refresh' ,  {users:_users})
                 })
                 .catch(err => {
-                    io.emit('error' ,  'error DB find Users on event disconnect')
+                    socket.emit('error' ,  'error DB find Users on event disconnect')
                 })
         })
 
 
-
-        // use parallel
-        // to emit msg 
-        // to save msg
-        // emit new msg with full user and full caller and content
-        // save new msg with userid and senterid and content and created
+        // on event msg
+        // sent msg to caler.socketId
+        // then save it in DB
         socket.on('msg' , msg => {
             async.parallel([
                 () => {
@@ -113,7 +125,7 @@ module.exports =  io => {
                             // console.log('save msg')
                         })
                         .catch( err => {
-                            io.emit('error' ,  'error DB save msg on event msg')
+                            socket.emit('error' ,  'error DB save msg on event msg')
                         })
                 }
             ])

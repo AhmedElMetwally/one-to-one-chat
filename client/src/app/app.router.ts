@@ -1,13 +1,47 @@
-import { IsLoginGuard } from './app.guard';
+import { LogoutComponent } from './user/logout/logout.component';
+import { SignupComponent } from './user/signup/signup.component';
 import { ChatComponent } from './chat/chat.component';
 import { UserComponent } from './user/user.component';
-import { Routes, RouterModule } from '@angular/router';
-import { UserRouter } from './user/user.router';
+import { Routes } from '@angular/router';
+import { SigninComponent } from './user/signin/signin.component';
+import { IsLoginGuard, IsNotLoginGuard } from './app.guard';
 
-const router : Routes = [
-    {path : '' , redirectTo : 'user' ,pathMatch:'full' },
-    {path : 'user' , component : UserComponent , children: UserRouter },
-    {path : 'chat' , component : ChatComponent , canActivate : [IsLoginGuard] }
+
+
+export const routing : Routes = [
+    {
+        path : '' , 
+        redirectTo : 'user',
+        pathMatch:'full' 
+    },
+    {
+        path : 'user' , 
+        component : UserComponent , 
+        children: 
+            [{
+                path : '' ,  
+                pathMatch:'full', 
+                redirectTo : 'signin' 
+            },
+            {
+                path : 'signin' , 
+                component : SigninComponent ,
+                canActivate : [IsNotLoginGuard] 
+            },
+            {
+                path : 'signup' , 
+                component : SignupComponent  ,
+                canActivate : [IsNotLoginGuard] 
+            },
+            {
+                path : 'logout' , 
+                component : LogoutComponent , 
+                canActivate : [IsLoginGuard]  
+            }]
+    },
+    {
+        path : 'chat' , 
+        component : ChatComponent , 
+        canActivate : [IsLoginGuard] 
+    }
 ];
-
-export const routing = RouterModule.forRoot(router);
