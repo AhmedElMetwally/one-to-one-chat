@@ -4,9 +4,10 @@ import { Iuser } from './app.user';
 import { Injectable } from '@angular/core';
 import { Http , Headers , Response} from '@angular/http';
 import 'rxjs/add/operator/map';
+import { ChatService } from '../chat/chat.service';
 @Injectable()
 export class UserService {
-  constructor(private _http:Http , private _router:Router) {};
+  constructor(private _http:Http , private _router:Router , private _chatService:ChatService) {};
 
   // check Login 
   // with token
@@ -40,13 +41,17 @@ export class UserService {
   Login(token , _id) :void {
     localStorage.setItem('token' , token);
     localStorage.setItem('_id' , _id);
-    this._router.navigate(['/chat'])
+    // connect to socket.io
+    this._chatService.io.connect();
+    this._router.navigate(['/chat']);
   }
 
   // clear localStorage 
   // go to signin
   Logout():void{
     localStorage.clear();
+    // disconnect to socket.io
+    this._chatService.io.disconnect();
     this._router.navigate(['/user' , 'signin']);
   }
 

@@ -2,7 +2,6 @@ import { Imsg } from './chat.msg';
 import { UserService } from './../user/user.service';
 import { Iuser } from './../user/app.user';
 import { Component, OnInit } from '@angular/core';
-import * as io from 'socket.io-client';
 import { ChatService } from './chat.service';
 import { environment } from '../../environments/environment';
 
@@ -13,30 +12,27 @@ import { environment } from '../../environments/environment';
 })
 export class ChatComponent implements OnInit {
   
-  // socket.io
-  io = io(environment.url);
+  io = this._chatService.io;
+
   
   // _id  
   // token
   // myuser
-  _id :string = localStorage.getItem('_id');
-  token :string = localStorage.getItem('token');
+  _id : string  = localStorage.getItem('_id');
+  token : string = localStorage.getItem('token');
   user: Iuser;
 
-  // caller User 
-  caller:Iuser ;
-
-  // all users 
+  // all users filter thisUser
   users:Iuser[] = [];
+
+  // caller 
+  caller:Iuser ;
   
-  // get all messages of caller
+  // all messages of caller
   messages:Imsg[] = [];
 
   // new message
   newMessage:Imsg;
-
-  
-
 
 
   constructor(private _chatService:ChatService , private _userService:UserService) {
@@ -48,13 +44,14 @@ export class ChatComponent implements OnInit {
     this.io.emit('login' , this.token );
     this.io.on('login' , data => {
       console.log('login');
-      this.user = data.user
+      this.user = data.user;
     });
 
     // get all users 
     // filter thisUser
     this.io.on('refresh' , data =>{
       console.log('refresh');
+      console.log(data.users);
       this.users = [];
       this.users = data.users.filter( u => u._id != this._id);
     });
@@ -69,7 +66,6 @@ export class ChatComponent implements OnInit {
         };
       };
     });
-
     
     // on any error in socket.io
     // logout this user 
@@ -77,7 +73,7 @@ export class ChatComponent implements OnInit {
     this.io.on('error' , err => {
       console.log(err);
       this._userService.Logout();
-    })
+    });
 
 
 
@@ -119,7 +115,9 @@ export class ChatComponent implements OnInit {
     this.messages = [];
   };
 
-  ngOnInit(){};
+  ngOnInit(){
+
+  };
 
 }
 

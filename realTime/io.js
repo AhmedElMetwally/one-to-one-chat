@@ -67,7 +67,7 @@ module.exports =  io => {
         // get all users from DB
         // set online true or false
         // set all users to all users
-        socket.on('disconnect' , () => {   
+        socket.on('disconnect' , () => {  
             User.find({})
                 .lean() // this is very import to change Property in mongoose 
                 .then(users =>{
