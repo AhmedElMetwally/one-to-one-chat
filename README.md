@@ -12,8 +12,8 @@
 <hr>
 
 <div  align="center">
-    <img src="https://i.imgur.com/vDutjFB.png" alt="mean stack chat app">
-    <img src="https://i.imgur.com/t4S9ePr.png" alt="mean stack chat app">
+    <img src="https://i.imgur.com/smH7BBh.png" alt="mean stack chat app">
+    <img src="https://i.imgur.com/4AIlsGU.png" alt="mean stack chat app">
 </div>
 
 <hr>
