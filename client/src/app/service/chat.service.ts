@@ -64,7 +64,7 @@ export class ChatService {
   // get any error from socket
   SocketIO_error():Observable<any>{
     return new Observable(observable => {
-      this.io.on('error' , err => {
+      this.io.on('err' , err => {
         observable.next(err);
       });    
     });    

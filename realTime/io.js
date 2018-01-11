@@ -23,8 +23,8 @@ module.exports =  io => {
                 // get token
                 // sent decode
                 cb => {
-                    jwt.verify( token , secret , (err , decode )=>{
-                        cb(err , decode)
+                    jwt.verify( token , secret , (err , decode ) => {
+                        cb(err , decode);
                     })
                 },
 
@@ -63,7 +63,7 @@ module.exports =  io => {
                 // 
             ] , (err , user , EditUsers) => { 
                 if(err){
-                    socket.emit('error' ,  {err : err , event : 'login'});
+                    socket.emit('err' ,  {err : err , event : 'login'});
                 }else{
                     // sent updated user to thisUser
                     socket.emit('login' ,  {user : user});
@@ -111,12 +111,14 @@ module.exports =  io => {
                 // get all users with online(trur , false) and emit to all users
                 ] , (err , users) => {
                     if(err){
-                        // socket.emit('error' ,  {err : err , event : 'disconnect'});
+                        // socket.emit('err' ,  {err : err , event : 'disconnect'});
                     }else{
                         io.emit('refresh' ,  { users : users });
                     };
                 });
         })
+
+
 
 
         // on event msg
@@ -127,7 +129,7 @@ module.exports =  io => {
                 
                 // sent msg
                 () => {
-                    io.to(msg.caller.socketId).emit('msg' , msg)
+                    io.to(msg.caller.socketId).emit('msg' , msg);
                 },
 
                 // save msg 
@@ -142,11 +144,11 @@ module.exports =  io => {
                             // console.log('save msg')
                         })
                         .catch( err => {
-                            ocket.emit('error' ,  {err : err , event : 'msg'});
+                            ocket.emit('err' ,  {err : err , event : 'msg'});
                     })
                 }
-            ])
-        })
+            ]);
+        });
 
 
 
@@ -154,4 +156,4 @@ module.exports =  io => {
 
 
     });
-}
+};
