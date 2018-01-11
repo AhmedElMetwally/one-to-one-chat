@@ -34,6 +34,7 @@ router.post('/signup', function(req, res, next){
     // get result 
     ], (err , user , token) => {
       if(err){
+        // console.log(err);
         res.status(401).json();
       }else{
         res.status(200).json({
@@ -63,19 +64,19 @@ router.post('/signin' , function(req,res){
     // find user by email
     cb => {
       User.findOne({email : req.body.email} , (err , user) => {
+        if(user){
           cb(err , user);
+        }else{
+          cb(new Error('this user is not in DB')); 
+        };
       });
     },
     
     // compare password
     (user , cb ) => {
-      if(user){ 
-        user.comparePassword( req.body.password , (err , isMatch)=>{
-          cb(err , user , isMatch)
-        });
-      }else{
-        cb(new Error('User Not Found By Email'))
-      };
+      user.comparePassword( req.body.password , (err , isMatch)=>{
+        cb(err , user , isMatch)
+      });
     },
     
     // create token
@@ -126,7 +127,11 @@ router.get('/ckeckAuth' , function(req,res){
     // find user of his _id
     (decode , cb) =>{
       User.findById( req.query._id , (err , user)=>{
-        cb(err , user , decode );
+        if(user){
+          cb(err , user , decode );
+        }else{
+          cb(new Error('this user is not in DB')); 
+        }
       });
 
     }
@@ -135,10 +140,11 @@ router.get('/ckeckAuth' , function(req,res){
     // get all result
     // compare  token _id with user _id 
     ], (err , user , decode) => {
-      if(err || user._id != decode.user._id ){
+      if(err){
+        // console.log(err)
         res.status(200).json({auth : false});
       }else{
-        res.status(200).json({auth : true});
+        res.status(200).json({auth : user._id == decode.user._id })
       };
     });
 

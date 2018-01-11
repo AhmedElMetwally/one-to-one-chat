@@ -7,14 +7,13 @@
 
     <div class="row">
 
-      <!-- users -->
+      <!-- users block-->
       <div class="col-md-3"  >
-  
-        <!-- check if users -->
+        <!-- check if users to display users -->
         <div *ngIf="users" class="users" >
-
           <!-- for loop users -->
           <div *ngFor="let user of users" >
+            
             <!-- 
               onclick check if caller == user
               if caller if user
@@ -34,7 +33,7 @@
                 'btn-success' : user._id == caller?._id, 
                 'btn-default' : user._id != caller?._id  
               }"
-              class="btn  center-block user" 
+              class="btn  center-block user hvr-buzz-out " 
               title='{{user.email}}' 
               (click)='user._id == caller?._id ? clearCaller() : call(user)'
             >
@@ -44,21 +43,25 @@
               <span *ngIf="user.online" style="margin-left:5px" class="glyphicon glyphicon-send text-success"></span>
               <span *ngIf="!user.online" style="margin-left:5px"  class="glyphicon glyphicon-send"></span>
             </button>
+
           </div>
-        </div>
+          <!-- end for loop users -->
+          
 
-        <!-- check if users -->
-        <div *ngIf="!users.length" >
-          <button class="btn btn-danger center-block user">No  Users</button>
+          <!-- check if users to display no users -->
+          <div *ngIf="!users.length" >
+            <button class="btn btn-danger center-block hvr-buzz-out user">No Users</button>
+          </div>
+          <!-- end check if users to display no users -->
+        
         </div>
-
+        <!-- end for loop users -->
       </div>
-      <!-- end users -->
+      <!-- end users block -->
+      
 
-      <br>
-
-      <!-- message body -->
-      <div class="col-md-9 panel-body" *ngIf='caller'>
+      <!-- message body block -->
+      <div class="col-md-9 panel-body"   *ngIf='caller'>
 
         <!-- messages -->
         <!-- scroll to end this div -->
@@ -91,18 +94,18 @@
         <br>
         
         <!-- form sent message -->
-        <form method="post" (submit)='content.value ? sent(content.value) : false; content.value=""; '>
+        <form method="post" (submit)='content.value ? sent(content.value) : false; content.value=""; content.focus();'>
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Message...." #content >
             <div class="input-group-btn">
-              <button class="btn btn-primary" type="submit">Sent</button>
+              <button class="btn btn-primary " type="submit">Sent</button>
             </div>
           </div>
         </form>
         <!-- end form sent message -->
 
       </div>
-      <!-- end message body -->
+      <!-- end message body block -->
 
     </div>
   </div>

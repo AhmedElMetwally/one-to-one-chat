@@ -1,7 +1,8 @@
 button.user{
     min-width: 80%;
     padding: 10px 10px;
-    margin-top: 14px ;
+    margin-top: 8px ;
+    margin-bottom: 8px ;
 }
 
 .messages{
@@ -12,7 +13,7 @@ button.user{
 }
 
 .users{
-    max-height: 300px;
+    height: 300px;
     overflow-y: auto;
 }
 

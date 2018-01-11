@@ -35,6 +35,10 @@ export class AuthService {
                 if(data.auth == false){
                     this.Logout();
                 };
+                // if any error in server logout and print error
+            } , err => {
+                console.log(err);
+                this.Logout();
             });
     }
 

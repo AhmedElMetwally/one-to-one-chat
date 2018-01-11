@@ -16,14 +16,15 @@
     "express": "~4.15.5",
     "jsonwebtoken": "^8.1.0",
     "mongoose": "^5.0.0-rc2",
+    "mongoose-unique-validator": "^1.0.6",
     "morgan": "~1.9.0",
     "randomstring": "^1.1.5",
     "serve-favicon": "~2.4.5",
     "socket.io": "2.0.4"
   },
   "engines": {
-    "node" : "8.9.3",
-    "npm" : "3.10.10"
+    "node": "8.9.3",
+    "npm": "3.10.10"
   },
   "author": {
     "name": "Ahmed ElMetwally",

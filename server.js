@@ -18,9 +18,8 @@ const app = express();
 const DatabaseUrl = app.get('env') == 'development' ? process.env.localDatabaseUrl : process.env.serverDatabaseUrl;
 mongoose.Promise = require('bluebird');
 mongoose.connect( DatabaseUrl )
-    .then(()=>console.log('connected to the database'))
-    .catch(err=>console.log(err));
-
+    .then( () => console.log('connected to the database') )
+    .catch( err => console.log(err) );
 
 // http
 const http = require('http').Server(app);
