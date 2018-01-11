@@ -32,11 +32,9 @@ export class AuthService {
         this._http.get(`${environment.url}/users/ckeckAuth?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
             .map((res:Response) => res.json())
             .subscribe(data => {
-                // auth is good
-            },
-            err =>{
-                // auth is bad
-                this.Logout();
+                if(data.auth == false){
+                    this.Logout();
+                };
             });
     }
 

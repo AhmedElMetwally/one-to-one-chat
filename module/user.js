@@ -24,13 +24,9 @@ UserSchema.pre('save' , function(next){
 });
 
 // compare hash with password
-UserSchema.methods.comparePassword = function(password){
+UserSchema.methods.comparePassword = function(password  , callback ){
     var user = this;
-    return new Promise((resolve, reject) => {
-        bcrypt.compare(password , user.password)
-            .then(isMatch=>resolve(isMatch))
-            .catch(err=>reject(err))
-    })
+    return bcrypt.compare(password , user.password , callback )
 };
 
  
