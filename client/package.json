@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
+    "build": "ng build --prod --aot=false",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -27,6 +27,7 @@
     "font-awesome": "^4.7.0",
     "rxjs": "^5.5.2",
     "socket.io-client": "^2.0.4",
+    "time-ago-pipe": "^1.2.1",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {

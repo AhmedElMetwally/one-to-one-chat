@@ -17,6 +17,7 @@ import { ChatService } from './service/chat.service';
 import { IsLoginGuard ,IsNotLoginGuard} from './app.guard';
 import {  routing } from './app.router';
 
+import {TimeAgoPipe} from 'time-ago-pipe';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {  routing } from './app.router';
     ChatComponent,
     SigninComponent,
     SignupComponent,
-    LogoutComponent
+    LogoutComponent,
+    TimeAgoPipe // use this line becouse error [ $ ng build --prod --aot=false ]
   ],
   imports: [
     BrowserModule,
@@ -36,6 +38,6 @@ import {  routing } from './app.router';
     ReactiveFormsModule
   ],
   providers: [ IsLoginGuard , IsNotLoginGuard  , ChatService , AuthService ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent] 
 })
 export class AppModule { }
