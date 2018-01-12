@@ -1,3 +1,4 @@
+/* users */
 button.user{
     min-width: 80%;
     padding: 10px 10px;
@@ -17,25 +18,57 @@ button.user{
     overflow-y: auto;
 }
 
-.messages .msg{
+
+
+/* parent of all msg */
+.messages .msg-parent{
+    width: 70%;
+    margin-bottom: 15px
+}
+/* all msg */
+.messages .msg-parent .msg{
     background: #424242;
     color: white;
     font-size: 15px;
     border-radius: 8px;
-    padding: 5px 15px;
-    width: 70%;
+    padding: 15px 15px;
     word-break: break-all;
-    
+    margin-bottom: 0
 }
-
-.messages .msg.me{
+/* the chap af all msg */
+.messages .msg-parent .crop{
+    background: #424242;
+    width: 3%;
+    height: 11px;
+    margin-left: 3%;
+    clip-path: polygon(100% 0, 0 0, 0 100%);
+}
+/* parent my msg */
+.messages .msg-parent.me{
     margin-left: 30%;
     text-align: right;
 }
+/* chap of my msg */
+.messages .msg-parent.me .crop{
+    background: #424242;
+    width: 3%;
+    height: 11px;
+    margin-left: 94%;
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
 
+
+
+/* date */
 .messages .date{
-    color: whitesmoke;
+    color: rgba(255, 255, 255, 0.4);
     font-size: 10px;
     padding-top: 12px;
+    width: 100%;
+    display: inline-block;
+    text-align: right;
+}
+.messages .msg-parent.me  .date{
+    text-align: left
 }
  

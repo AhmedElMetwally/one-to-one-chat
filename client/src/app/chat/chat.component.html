@@ -1,6 +1,7 @@
 <h1 class="text-center hidden-xs">Real Time Chat</h1>
 <h3 class="text-center visible-xs ">Real Time Chat</h3>
 <hr>
+
 <!-- panel-default -->
 <div class="panel panel-default chat">
   <div class="panel-body">
@@ -35,7 +36,7 @@
               }"
               class="btn  center-block user hvr-buzz-out " 
               title='{{user.email}}' 
-              (click)='user._id == caller?._id ? clearCaller() : call(user)'
+              (click)='user._id == caller?._id ? clearCaller() : call(user);'
             >
               {{user.name}}
            
@@ -64,29 +65,32 @@
       <div class="col-md-9 panel-body"   *ngIf='caller'>
 
         <!-- messages -->
-        <!-- scroll to end this div -->
-        <div class="messages" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+        <div class="messages"  #scrollMe [scrollTop]="scrollMe.scrollHeight">
           <div *ngFor="let message of messages" >
-              <!-- message.user._id == _id  -> this user if owner this msg -->
-            <p 
-              class="lead msg "
+            
+
+            <!-- start msg parent -->
+            <div class="msg-parent"
               [ngClass]="{
                 'me' : message.user._id == _id 
               }"
-              (click)='message.showDate = !message.showDate'
             >
-              {{message.content}}
-              <br>
-              <!-- 
-                use undefind proparty to hide date
-                on click convert this proparty 
-              -->
-              <span class="date"  [hidden]='!message.showDate'>
-                  {{message.created | date:'medium'}}
-              </span>
-            </p>
-            
-            
+              <!-- message.user._id == _id  -> this user if owner this msg -->
+              <p class="msg ">
+
+                {{message.content}}
+
+                <br>
+
+                <span class="date" >
+                    {{message.created | date:'medium'}}
+                </span>
+              </p>
+              <p class="crop"></p>
+            </div>
+            <!-- end start msg parent -->
+
+
           </div>
         </div>
         <!-- end messages -->
@@ -110,5 +114,6 @@
     </div>
   </div>
 
-<!-- panel-default -->
 </div> 
+<!-- panel-default -->
+

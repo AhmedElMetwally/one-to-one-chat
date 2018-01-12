@@ -1,9 +1,8 @@
 import { Iuser } from './../Iuser';
 import { ChatService } from './../service/chat.service';
 import { AuthService } from './../service/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { environment } from '../../environments/environment';
-
 
 @Component({
   selector: 'app-chat',
@@ -77,7 +76,7 @@ export class ChatComponent implements OnInit {
     }
     this._chatService.io.emit('msg' ,msg);
     this.messages.push(msg);
-  };
+   };
   
   // set this user in caller
   // get all messages of thisUser and caller
@@ -96,6 +95,7 @@ export class ChatComponent implements OnInit {
     this.caller = null;
     this.messages = [];
   };
+
 
   ngOnInit(){};
 
