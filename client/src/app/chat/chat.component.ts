@@ -81,11 +81,16 @@ export class ChatComponent implements OnInit {
   // set this user in caller
   // get all messages of thisUser and caller
   call(caller):void{
+    this.messages = [];
     this.caller = caller;
     this._chatService.getMessages( this._id , caller._id)
       .subscribe(messages => {
-        this.messages = messages;
-      })
+        
+        // if Response is wait
+        // and user is sent msg
+        // this code display new msg with Response messages
+        this.messages = [ ...messages , ...this.messages];
+      });
   };
 
   // end the call 

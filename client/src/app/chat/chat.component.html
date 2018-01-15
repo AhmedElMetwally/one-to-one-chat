@@ -28,7 +28,7 @@
               set class default remove success
               
              -->
-            <button 
+            <a 
               [ngClass]=
               "{
                 'btn-success' : user._id == caller?._id, 
@@ -43,7 +43,7 @@
               <!-- if user online -->
               <span *ngIf="user.online" style="margin-left:5px" class="glyphicon glyphicon-send text-success"></span>
               <span *ngIf="!user.online" style="margin-left:5px"  class="glyphicon glyphicon-send"></span>
-            </button>
+            </a>
 
           </div>
           <!-- end for loop users -->
@@ -51,7 +51,7 @@
 
           <!-- check if users to display no users -->
           <div *ngIf="!users.length" >
-            <button class="btn btn-danger center-block hvr-buzz-out user">No Users</button>
+            <a class="btn btn-danger center-block hvr-buzz-out user">No Users</a>
           </div>
           <!-- end check if users to display no users -->
         

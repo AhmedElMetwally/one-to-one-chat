@@ -1,9 +1,10 @@
 {
   "name": "one-to-one-real-time-chat",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
-    "start": "node server"
+    "start": "node server",
+    "commit" : "git add . && git commit -m '$commit' && git push heroku master"
   },
   "dependencies": {
     "async": "^2.6.0",

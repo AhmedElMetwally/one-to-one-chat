@@ -1,6 +1,6 @@
 /* users */
-button.user{
-    min-width: 80%;
+a.user{
+    width: 80%;
     padding: 10px 10px;
     margin-top: 8px ;
     margin-bottom: 8px ;

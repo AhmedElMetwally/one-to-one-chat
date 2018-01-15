@@ -33,12 +33,17 @@ export class ChatService {
 
   // on any socket (connect or disconnet)
   // on refresh get all updated users
-  // return users filter thisUser
+  // filter thisUser
+  // sort users (online user first)
+  // return users 
   socketIO_refresh():Observable<Array<Iuser>>{
     return new Observable(observable => {
       this.io.on('refresh' , data => {
-        observable.next(data.users.filter( u => u._id != localStorage.getItem('_id')));
-        // observable.complete();
+        observable.next(
+          data.users
+          .filter( u => u._id != localStorage.getItem('_id'))
+          .sort(A => A.online ? -1 : 1)
+        );
       });
     });
   };
