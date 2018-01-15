@@ -5,13 +5,14 @@ import { UserComponent } from './user/user.component';
 import { Routes } from '@angular/router';
 import { SigninComponent } from './user/signin/signin.component';
 import { IsLoginGuard, IsNotLoginGuard } from './app.guard';
+import { AboutComponent } from './about/about.component';
 
 
 
 export const routing : Routes = [
     {
         path : '' , 
-        redirectTo : 'user',
+        redirectTo : 'about',
         pathMatch:'full' 
     },
     {
@@ -43,5 +44,9 @@ export const routing : Routes = [
         path : 'chat' , 
         component : ChatComponent , 
         canActivate : [IsLoginGuard] 
-    }
+    },
+    {
+        path : 'about' , 
+        component : AboutComponent 
+    },
 ];

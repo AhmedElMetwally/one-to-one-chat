@@ -26,7 +26,9 @@ router.get('/messages' , function(req,res){
     .populate('caller')
     .exec()
     .then( messages =>{
-      res.status(200).json(messages)
+      // setTimeout(()=>{
+        res.status(200).json(messages)
+      // } , 3000)
     }).catch(err => {
       res.status(401).json();
     })

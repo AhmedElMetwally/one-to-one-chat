@@ -18,6 +18,8 @@ import { IsLoginGuard ,IsNotLoginGuard} from './app.guard';
 import {  routing } from './app.router';
 
 import {TimeAgoPipe} from 'time-ago-pipe';
+import { NavbarComponent } from './navbar/navbar.component';
+import { AboutComponent } from './about/about.component';
 
 
 @NgModule({
@@ -28,7 +30,9 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     SigninComponent,
     SignupComponent,
     LogoutComponent,
-    TimeAgoPipe // use this line becouse error [ $ ng build --prod --aot=false ]
+    TimeAgoPipe,
+    NavbarComponent,
+    AboutComponent // use this line becouse error [ $ ng build --prod --aot=false ]
   ],
   imports: [
     BrowserModule,
@@ -37,7 +41,12 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     RouterModule.forRoot(routing),
     ReactiveFormsModule
   ],
-  providers: [ IsLoginGuard , IsNotLoginGuard  , ChatService , AuthService ],
+  providers: [ 
+    IsLoginGuard, 
+    IsNotLoginGuard , 
+    ChatService , 
+    AuthService, 
+  ],
   bootstrap: [AppComponent] 
 })
 export class AppModule { }

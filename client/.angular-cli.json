@@ -20,11 +20,13 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "../node_modules/bootswatch/cyborg/bootstrap.min.css"
+        "../node_modules/bootswatch/cyborg/bootstrap.min.css",
+        "./assets/slider-pro-master/dist/css/slider-pro.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
-        "../node_modules/bootstrap/dist/js/bootstrap.min.js"
+        "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+        "./assets/slider-pro-master/dist/js/jquery.sliderPro.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
