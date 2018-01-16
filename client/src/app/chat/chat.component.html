@@ -35,7 +35,7 @@
                 'btn-default' : user._id != caller?._id  
               }"
               class="btn  center-block user hvr-buzz-out " 
-              title='{{user.email}}' 
+              title='{{user.name}}' 
               (click)='user._id == caller?._id ? clearCaller() : call(user);'
             >
               {{user.name}}

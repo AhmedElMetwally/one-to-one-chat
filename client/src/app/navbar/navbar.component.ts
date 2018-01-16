@@ -10,8 +10,8 @@ export class NavbarComponent {
   constructor(
     private _authService:AuthService ){};
 
-  isLogin():boolean{
-    return this._authService.isLogin();
-  };
-  
+    isLogin(){
+      return this._authService.isLogin();
+    }
+ 
 };

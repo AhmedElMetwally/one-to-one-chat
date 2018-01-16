@@ -1,3 +1,5 @@
+import { ProfileComponent } from './user/profile/profile.component';
+import { BlogComponent } from './blog/blog.component';
 import { LogoutComponent } from './user/logout/logout.component';
 import { SignupComponent } from './user/signup/signup.component';
 import { ChatComponent } from './chat/chat.component';
@@ -38,12 +40,21 @@ export const routing : Routes = [
                 path : 'logout' , 
                 component : LogoutComponent , 
                 canActivate : [IsLoginGuard]  
+            },
+            {
+                path : 'profile' , 
+                component : ProfileComponent , 
+                canActivate : [IsLoginGuard]  
             }]
     },
     {
         path : 'chat' , 
         component : ChatComponent , 
         canActivate : [IsLoginGuard] 
+    },
+    {
+        path : 'blog' , 
+        component : BlogComponent 
     },
     {
         path : 'about' , 

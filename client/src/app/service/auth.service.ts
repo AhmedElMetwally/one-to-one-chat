@@ -5,41 +5,34 @@ import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { Http , Headers , Response} from '@angular/http';
 import 'rxjs/add/operator/map';
-import { ChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
+import { AuthService as SocialAuthService } from "angular2-social-auth";
 
 
+ 
 @Injectable()
 export class AuthService {
   constructor(
         private _http:Http , 
         private _router:Router , 
-        private _chatService:ChatService ){};
+        private _chatService:ChatService,
+        private _socialAuthService : SocialAuthService ){};
 
 
 
     
     // is login
     isLogin() :boolean {
-        return localStorage.getItem('token') != null && localStorage.getItem('_id') != null
+        return localStorage.getItem('token') != null 
     };
 
     // ckeckAuth
     // if not auth 
     // logout
-    ckeckAuth():void{
+    ckeckAuth(){
         var headers = new Headers();
         headers.append('Content-Type','application/json');
-        this._http.get(`${environment.url}/users/ckeckAuth?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
-            .map((res:Response) => res.json())
-            .subscribe(data => {
-                if(data.auth == false){
-                    this.Logout();
-                };
-                // if any error in server logout and print error
-            } , err => {
-                console.log(err);
-                this.Logout();
-            });
+        return this._http.get(`${environment.url}/users/ckeckAuth?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
+            .map((res:Response) => res.json());
     }
 
 
@@ -55,6 +48,7 @@ export class AuthService {
         this._router.navigate(['/chat']);
     }
 
+
     // logout 
     // clear localstorge
     // git to /user/signin
@@ -66,14 +60,7 @@ export class AuthService {
     }
 
 
-
-
-
-
-
-
-
-    
+    // sent name email password
     signupUser( user:Iuser ) :any {
         var headers = new Headers();
         headers.append('Content-Type','application/json');
@@ -81,11 +68,29 @@ export class AuthService {
           .map((res:Response) => res.json());
       }
     
-      signinUser( user:Iuser ) :any {
+    // sent email password
+    signinUser( user:Iuser ) :any {
         var headers = new Headers();
         headers.append('Content-Type','application/json');
         return this._http.post(environment.url + '/users/signin' , user , {headers :headers})
-          .map((res:Response) => res.json());
-      }
+            .map((res:Response) => res.json());
+    }
+
+
+   
+    facebookSigninOrSignup(user : Iuser): any {
+        // Signin Or Signup in server
+        // get _id , token 
+        var headers = new Headers();
+        headers.append('Content-Type','application/json');
+        return this._http.post(environment.url + '/users/facebookSigninOrSignup' , user , {headers :headers})
+            .map((res:Response) => res.json())
+    };
+
+
+
+
+
+      
 
 }

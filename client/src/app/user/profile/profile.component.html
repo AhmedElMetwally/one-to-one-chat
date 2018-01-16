@@ -1,0 +1,21 @@
+
+<div class="panel panel-default"  *ngIf="user">
+  <div class="panel-heading">
+      <!-- <h3 class="panel-title"> Ahmed El Metwally </h3> -->
+  </div>
+  <div class="panel-body">
+      <div class="row">
+          <div class=" col-md-4">
+              <img class='img-thumbnail' src="{{user.image }}" alt="profile image" style="padding: 15px;">
+              <button type="file"  class="btn btn-primary btn-block hvr-buzz-out" target="_blank">Edit Image</button>
+          </div>
+          <div class=" col-md-8">
+              <br>
+              <ul class="list-group">
+                  <li class="list-group-item"  ><strong> Username : </strong> {{ user.name  }} </li>
+                  <li class="list-group-item" ><strong> Email : </strong>{{ user.email  }}</li>
+              </ul>
+          </div>
+      </div>
+  </div>
+</div>

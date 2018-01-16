@@ -151,4 +151,70 @@ router.get('/ckeckAuth' , function(req,res){
 });
 
  
+router.get('/find' , (req , res) => {
+  // get user with his data
+
+  let { _id } = req.query;
+  User.findById(_id)
+    .lean()
+    .then(user => {
+      if(user){
+        user.password = '';
+        res.status(200).json({user : user});
+      }else{
+        res.status(401).json('Not Found');
+      }
+    })
+    .catch(err => {
+      res.status(401).json(err);
+    });
+});
+
+router.post('/facebookSigninOrSignup' , (req , res) => {
+
+  async.waterfall([
+
+    // find user with condition
+    // if not find
+    // create with document 
+    // ----------------------
+    // find user with facebook id 
+    // if not find 
+    // create with req.body data 
+    cb => {
+      User.findOneOrCreate( {'facebook.id' : req.body.facebook.id } , req.body , (err , user) => {
+        cb(err , user)
+      })
+
+    },
+
+
+    // after save user
+    // get token
+    (user , cb) => {
+      jwt.sign({user : user} , secret , { expiresIn: '24h' } , function(err , token){
+        cb(err , user ,token);
+      });
+    }
+
+
+    // if err
+    // sent err
+    // else sent token and _id to login
+  ] , (err , user , token) => {
+    if(err){
+      res.status(401).json(err);
+    }else{
+      res.status(200).json({
+        token : token , 
+        _id : user._id
+      });
+    };
+  })
+
+  
+});
+
+
+
 module.exports = router;

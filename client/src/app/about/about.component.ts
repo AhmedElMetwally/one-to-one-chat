@@ -12,7 +12,7 @@ export class AboutComponent  {
   constructor(){
     
     // blank image path
-    this.blankImgPath = '../../assets/slider-pro-master/src/css/images/blank.gif';
+    this.blankImgPath = './assets/slider-pro-master/dist/css/images/blank.gif';
 
     // slider confid
     $( document ).ready(function( $ ) {

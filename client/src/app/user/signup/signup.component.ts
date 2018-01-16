@@ -1,7 +1,7 @@
 import { AuthService } from './../../service/auth.service';
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup , Validators , FormControl } from '@angular/forms';
+import { AuthService as SocialAuthService } from "angular2-social-auth";
 
 
 @Component({
@@ -10,8 +10,8 @@ import { FormGroup , Validators , FormControl } from '@angular/forms';
 })
 export class SignupComponent implements OnInit {
   constructor(
-    private _router:Router,
-    private _authService:AuthService){};
+    private _authService : AuthService,
+    private _socialAuthService : SocialAuthService ){};
 
 
   // new signup form
@@ -21,11 +21,12 @@ export class SignupComponent implements OnInit {
     password : new FormControl('', [Validators.required , Validators.minLength(8) , Validators.maxLength(30)])
   });
 
+
   // to show alert of error
   ErrorAlert:boolean = false;
 
 
-
+  // submit form signup
   onSubmit() :void{
     this._authService
       .signupUser({
@@ -34,14 +35,42 @@ export class SignupComponent implements OnInit {
         password : this.myform.controls.password.value
       })
       .subscribe( user => {
+        // login
         this._authService.Login(user.token , user._id);  
+
         this.myform.reset()
       } , err  => {
         this.ErrorAlert = true;
         console.log(err)
     });
   };
-  
-  ngOnInit(){};
 
+  
+  facebookSigninOrSignup() :void {
+
+    // get user from facebook
+    // create new user opject
+    this._socialAuthService.login('facebook')
+      .subscribe( (FBuser : any ) => {
+
+        // Signin Or Signup in server
+        // get _id , token 
+        this._authService.facebookSigninOrSignup({
+            facebook : {
+                id : FBuser.uid,
+                token : FBuser.token
+            },
+            name : FBuser.first_name +' '+ FBuser.last_name ,
+            email : FBuser.email || FBuser.uid,
+            image : `http://graph.facebook.com/${FBuser.uid}/picture?type=large&redirect=true&width=300&height=300`
+          })
+          .subscribe(( user : any ) => {
+
+            // login
+              this._authService.Login(user.token , user._id);  
+          });
+    });
+  };
+
+  ngOnInit(){};
 };

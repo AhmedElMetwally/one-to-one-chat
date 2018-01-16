@@ -86,5 +86,7 @@
     <small *ngIf="myform.controls.password.invalid && myform.controls.password.touched"  class="text-danger"> Must be 8-30 characters long</small> 
   </div>
 
-  <button type="submit" [disabled]='myform.invalid'   class=" hvr-buzz-out  btn btn-primary" style="padding:10px">Submit</button>
+  <button type="submit" [disabled]='myform.invalid'   class=" hvr-buzz-out  btn btn-primary" style="padding:10px">Signup</button>
+  <button type="button" (click)='facebookSigninOrSignup()'  class=" hvr-buzz-out  btn btn-primary" style="padding:10px">facebook</button>
+
 </form>

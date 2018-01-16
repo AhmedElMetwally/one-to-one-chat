@@ -5,10 +5,16 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 
 const UserSchema = new Schema({
-    email : {type : String ,  lowercase:true , required: true , unique: true},
+    email : {type : String ,  lowercase:true ,  unique: true , required: true},
     name : {type : String , required: true   },
-    password :{type : String , required: true  },
+    password :{type : String   },
     socketId : {type : String   },
+    image : {type : String , default : '/test/test'},
+    facebook : {
+        id : {type : String ,unique: true},
+        token : {type : String , unique: true }
+    }    
+
 });
 
 UserSchema.plugin(uniqueValidator);
@@ -32,6 +38,24 @@ UserSchema.methods.comparePassword = function(password  , callback ){
     var user = this;
     return bcrypt.compare(password , user.password , callback )
 };
+
+
+// findOne Or Create
+// find with condition
+// if not find
+// create with doc
+UserSchema.statics.findOneOrCreate = function findOneOrCreate( condition ,doc, callback) {
+    const self = this;
+    self.findOne(condition, (err, result) => {
+      return result 
+        ? callback(err, result)
+        : self.create(doc, (err, result) => {
+          return callback(err, result);
+        });
+    });
+  };
+
+
 
  
 module.exports = mongoose.model('user' , UserSchema);

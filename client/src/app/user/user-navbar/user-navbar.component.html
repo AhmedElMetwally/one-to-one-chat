@@ -1,0 +1,16 @@
+<div class="row" style="margin-bottom:20px">
+  <nav class=" col-md-12">
+    <ul class=" nav nav-tabs ">
+        <!--
+          isLogin()
+            return true or false
+            check if user is login with token
+        -->
+      <li><a  routerLinkActive='active' routerLink='signin' *ngIf="!isLogin()" > Signin</a></li>
+      <li><a routerLinkActive='active' routerLink='signup' *ngIf="!isLogin()" > Signup</a></li>
+      <li><a routerLinkActive='active' routerLink='profile' *ngIf="isLogin()" > Profile</a></li>
+      <li><a routerLinkActive='active' routerLink='logout' *ngIf="isLogin()" > Logout</a></li>
+    </ul>
+  </nav>
+</div>
+

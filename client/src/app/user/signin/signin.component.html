@@ -57,5 +57,7 @@
     submit is disabled if form invalid
   -->
 
-  <button type="submit" [disabled]='myform.invalid'  class=" hvr-buzz-out  btn btn-primary" style="padding:10px">Submit</button>
+  <button type="submit" [disabled]='myform.invalid'  class=" hvr-buzz-out  btn btn-primary" style="padding:10px">Signin</button>
+  <button type="button" (click)='facebookSigninOrSignup()'  class=" hvr-buzz-out  btn btn-primary" style="padding:10px">facebook</button>
+
 </form>

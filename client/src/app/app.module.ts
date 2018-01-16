@@ -10,16 +10,31 @@ import { SignupComponent  } from './user/signup/signup.component';
 import { SigninComponent } from './user/signin/signin.component';
 import { LogoutComponent } from './user/logout/logout.component';
 import { ChatComponent } from './chat/chat.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { AboutComponent } from './about/about.component';
+import { BlogComponent } from './blog/blog.component';
+import { ProfileComponent } from './user/profile/profile.component';
+import { UserNavbarComponent } from './user/user-navbar/user-navbar.component';
+
 
 import { AuthService } from './service/auth.service';
 import { ChatService } from './service/chat.service';
+import { ProfileService } from './service/profile.service';
 
 import { IsLoginGuard ,IsNotLoginGuard} from './app.guard';
 import {  routing } from './app.router';
 
 import {TimeAgoPipe} from 'time-ago-pipe';
-import { NavbarComponent } from './navbar/navbar.component';
-import { AboutComponent } from './about/about.component';
+
+
+import { AuthService as SocialAuthService } from "angular2-social-auth";
+import { Angular2SocialLoginModule } from "angular2-social-auth";
+Angular2SocialLoginModule.loadProvidersScripts({
+  "facebook": {
+    "clientId": "993583634135321",
+    "apiVersion": "v2.11"  
+  }
+});
 
 
 @NgModule({
@@ -32,21 +47,26 @@ import { AboutComponent } from './about/about.component';
     LogoutComponent,
     TimeAgoPipe,
     NavbarComponent,
-    AboutComponent // use this line becouse error [ $ ng build --prod --aot=false ]
+    AboutComponent,
+    BlogComponent,
+    ProfileComponent,
+    UserNavbarComponent  
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(routing),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    Angular2SocialLoginModule
   ],
   providers: [ 
     IsLoginGuard, 
     IsNotLoginGuard , 
     ChatService , 
     AuthService, 
+    ProfileService,
   ],
   bootstrap: [AppComponent] 
 })
-export class AppModule { }
+export class AppModule { };
