@@ -4,13 +4,14 @@ import { AuthService } from './../service/auth.service';
 import { Component, OnInit} from '@angular/core';
 import { environment } from '../../environments/environment';
 
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls : ['chat.component.css']
 })
 export class ChatComponent implements OnInit {
-  _id: string = localStorage.getItem('_id');
+  _id: string ;
   user: Iuser;
   users:Iuser[] = [];
   caller:Iuser ;
@@ -102,6 +103,8 @@ export class ChatComponent implements OnInit {
   };
 
 
-  ngOnInit(){};
+  ngOnInit(){
+    this._id =  localStorage.getItem('_id');
+  };
 
 }

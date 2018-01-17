@@ -10,8 +10,10 @@
 
       <!-- users block-->
       <div class="col-md-3"  >
+       
         <!-- check if users to display users -->
-        <div *ngIf="users" class="users" >
+        <div *ngIf="users.length" class="users" >
+
           <!-- for loop users -->
           <div *ngFor="let user of users" >
             
@@ -47,18 +49,24 @@
 
           </div>
           <!-- end for loop users -->
+
+        </div>
+        <!-- end check if users to display users  -->
           
 
-          <!-- check if users to display no users -->
-          <div *ngIf="!users.length" >
-            <a class="btn btn-danger center-block hvr-buzz-out user">No Users</a>
-          </div>
-          <!-- end check if users to display no users -->
+        <!-- check if not users to display no users -->
+        <div *ngIf="!users.length" >
+        
+          <a class="btn btn-danger center-block hvr-buzz-out user">No Users</a>
         
         </div>
-        <!-- end for loop users -->
+        <!-- end check if users to display no users -->
+        
+
       </div>
       <!-- end users block -->
+      
+
       
 
       <!-- message body block -->

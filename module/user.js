@@ -1,23 +1,20 @@
 const mongoose = require('mongoose');
 const bcrypt     = require('bcrypt');
 const Schema     = mongoose.Schema;
-const uniqueValidator = require('mongoose-unique-validator');
-
 
 const UserSchema = new Schema({
-    email : {type : String ,  lowercase:true ,  unique: true , required: true},
-    name : {type : String , required: true   },
-    password :{type : String   },
-    socketId : {type : String   },
-    image : {type : String , default : '/test/test'},
+    email    : { type : String ,  lowercase:true ,  unique: true },
+    name     : { type : String  },
+    password : { type : String   },
+    socketId : { type : String   },
+    image    : { type : String},
     facebook : {
-        id : {type : String ,unique: true},
-        token : {type : String , unique: true }
+        id    : String,
+        token : String
     }    
 
 });
 
-UserSchema.plugin(uniqueValidator);
 
 // convert password to hash
 UserSchema.pre('save' , function(next){

@@ -40,12 +40,14 @@ export class AuthService {
     // get _id and token in localstorage
     // connect socket.io
     // go to chat
-    Login(token , _id) :void {
+    Login(token , _id , navigate ) :void {
         localStorage.setItem('token' , token);
         localStorage.setItem('_id' , _id);
         // connect to socket.io
         this._chatService.io.connect();
-        this._router.navigate(['/chat']);
+        if(navigate){
+            this._router.navigate(navigate);
+        }
     }
 
 
@@ -54,9 +56,9 @@ export class AuthService {
     // git to /user/signin
     Logout():void{
         localStorage.clear();
-        // disconnect to socket.io
         this._chatService.io.disconnect();
         this._router.navigate(['/user' , 'signin']);
+        window.location.reload();
     }
 
 

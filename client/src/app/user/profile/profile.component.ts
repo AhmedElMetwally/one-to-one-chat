@@ -19,6 +19,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this._profileService.getUser()
     .subscribe(data => {
+      data.user.image = data.user.image || '../assets/noImage.jpg'
       this.user = data.user;
     }, err => {
       console.log(err)

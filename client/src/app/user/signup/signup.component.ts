@@ -36,7 +36,7 @@ export class SignupComponent implements OnInit {
       })
       .subscribe( user => {
         // login
-        this._authService.Login(user.token , user._id);  
+        this._authService.Login(user.token , user._id ,  ['/chat']);  
 
         this.myform.reset()
       } , err  => {
@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit {
           .subscribe(( user : any ) => {
 
             // login
-              this._authService.Login(user.token , user._id);  
+            this._authService.Login(user.token , user._id , ['/chat'] );  
           });
     });
   };

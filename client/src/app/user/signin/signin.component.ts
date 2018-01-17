@@ -31,7 +31,7 @@ export class SigninComponent implements OnInit {
         password : this.myform.controls.password.value
       })
       .subscribe( user => {
-        this._authService.Login(user.token , user._id)
+        this._authService.Login(user.token , user._id ,  ['/chat'])
         this.myform.reset();
       }, err => {
       this.ErrorAlert = true;
@@ -62,7 +62,8 @@ export class SigninComponent implements OnInit {
           .subscribe(( user : any ) => {
             
               // login
-              this._authService.Login(user.token , user._id);  
+              this._authService.Login(user.token , user._id ,  ['/chat'] );
+
           })
     });
   };

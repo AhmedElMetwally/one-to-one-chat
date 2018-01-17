@@ -35,7 +35,7 @@ router.post('/signup', function(req, res, next){
     ], (err , user , token) => {
       if(err){
         // console.log(err);
-        res.status(401).json();
+        res.status(401).json(err);
       }else{
         res.status(200).json({
           token : token , 
@@ -94,7 +94,7 @@ router.post('/signin' , function(req,res){
     // get result
     ], (err , user , token) => {
       if(err){
-        res.status(401).json();
+        res.status(401).json(err);
       }else{
         res.status(200).json({
           token : token , 
