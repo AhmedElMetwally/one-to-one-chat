@@ -25,6 +25,7 @@ mongoose.connect( DatabaseUrl )
 const http = require('http').Server(app);
 http.listen( process.env.PORT || 3000 , () => console.log('server is run [3000]'))
 
+
 // socket.io
 const io = require('socket.io')(http);
 require('./realTime/io')(io)

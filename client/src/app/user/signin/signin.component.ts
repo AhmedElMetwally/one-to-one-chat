@@ -30,42 +30,31 @@ export class SigninComponent implements OnInit {
         email : this.myform.controls.email.value,
         password : this.myform.controls.password.value
       })
-      .subscribe( user => {
-        this._authService.Login(user.token , user._id ,  ['/chat'])
-        this.myform.reset();
-      }, err => {
-      this.ErrorAlert = true;
-      console.log(err) 
+      .subscribe( data => {
+        if(data.status){
+          this._authService.Login( data.user.token , data.user._id ,  ['/chat']);  
+          this.myform.reset()
+        }else{
+          this.ErrorAlert = true;
+          console.log(data.err)
+        }
     });
   };
   
 
 
+  // find or create new facebook user
+  // get token and _id
   facebookSigninOrSignup():void{
+    this._authService.facebookSigninOrSignup()
 
-    // get user from facebook
-    // create new user opject
-    this._socialAuthService.login('facebook')
-      .subscribe(( FBuser : any ) =>{
+    // Signin Or Signup in server
+    // get _id , token 
+      .subscribe( user => {
 
-        // Signin Or Signup in server
-        // get _id , token 
-        this._authService.facebookSigninOrSignup({
-            facebook : {
-                id : FBuser.uid,
-                token : FBuser.token
-            },
-            name : FBuser.first_name +' '+ FBuser.last_name ,
-            email : FBuser.email || FBuser.uid,
-            image : `http://graph.facebook.com/${FBuser.uid}/picture?type=large&redirect=true&width=300&height=300`
-          })
-          .subscribe(( user : any ) => {
-            
-              // login
-              this._authService.Login(user.token , user._id ,  ['/chat'] );
-
-          })
-    });
+          // login
+          this._authService.Login(user.token , user._id ,  ['/chat'] );
+      });
   };
 
   

@@ -6,6 +6,7 @@ const Message = require('../module/message');
 const secret = process.env.secret;
 const async = require('async');
 
+
 // sign up
 router.post('/signup', function(req, res, next){
   
@@ -17,10 +18,9 @@ router.post('/signup', function(req, res, next){
 
     // save new user
     cb => {
-      var user = new User(req.body);
-        user.save( (err , user) => {
-          cb(err , user);
-        });
+      User.create(req.body , (err , user) => {
+        cb(err , user);
+      });
     },
 
     // create token
@@ -35,19 +35,20 @@ router.post('/signup', function(req, res, next){
     ], (err , user , token) => {
       if(err){
         // console.log(err);
-        res.status(401).json(err);
+        res.status(200).json({ err : err , status : false});
       }else{
         res.status(200).json({
-          token : token , 
-          _id : user._id
+          status : true,
+          user : {
+            _id : user._id ,
+            token : token 
+          }
         })
       }
   });
 
 
 });
-
-
 
 
 
@@ -67,7 +68,7 @@ router.post('/signin' , function(req,res){
         if(user){
           cb(err , user);
         }else{
-          cb(new Error('this user is not in DB')); 
+          cb('this user is not in DB'); 
         };
       });
     },
@@ -86,7 +87,7 @@ router.post('/signin' , function(req,res){
           cb(err , user , token);
         });
       }else{
-        cb(new Error('Error in Token'));
+        cb('Error in Token');
       };
     }
     
@@ -94,12 +95,16 @@ router.post('/signin' , function(req,res){
     // get result
     ], (err , user , token) => {
       if(err){
-        res.status(401).json(err);
+        console.log(err);
+        res.status(200).json({ err : err , status : false});
       }else{
         res.status(200).json({
-          token : token , 
-          _id : user._id
-        });
+          status : true,
+          user : {
+            _id : user._id ,
+            token : token 
+          }
+        })
       }
   }); 
  
@@ -130,7 +135,7 @@ router.get('/ckeckAuth' , function(req,res){
         if(user){
           cb(err , user , decode );
         }else{
-          cb(new Error('this user is not in DB')); 
+          cb('this user is not in DB' ); 
         }
       });
 
@@ -142,15 +147,16 @@ router.get('/ckeckAuth' , function(req,res){
     ], (err , user , decode) => {
       if(err){
         // console.log(err)
-        res.status(200).json({auth : false});
+        res.status(200).json({ err : err , status : false});
       }else{
-        res.status(200).json({auth : user._id == decode.user._id })
+        res.status(200).json({status : user._id == decode.user._id  })
       };
     });
 
 });
 
  
+
 router.get('/find' , (req , res) => {
   // get user with his data
 
@@ -169,6 +175,8 @@ router.get('/find' , (req , res) => {
       res.status(401).json(err);
     });
 });
+
+
 
 router.post('/facebookSigninOrSignup' , (req , res) => {
 

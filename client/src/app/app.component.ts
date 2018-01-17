@@ -15,13 +15,10 @@ export class AppComponent implements OnInit {
       if(this._authService.isLogin()){
         this._authService.ckeckAuth()
           .subscribe(data => {
-            if(data.auth == false){
-                this._authService.Logout();
-            };
-            // if any error in server logout and print error
-          } , err => {
-              console.log(err);
+            if(! data.status){
+              console.log(data.err)
               this._authService.Logout();
+            }
           });
       };
 

@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { Http , Headers , Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import { AuthService as SocialAuthService } from "angular2-social-auth";
+import { Observable } from 'rxjs/Observable';
 
 
  
@@ -63,6 +64,7 @@ export class AuthService {
 
 
     // sent name email password
+    // get _id , token 
     signupUser( user:Iuser ) :any {
         var headers = new Headers();
         headers.append('Content-Type','application/json');
@@ -71,6 +73,7 @@ export class AuthService {
       }
     
     // sent email password
+    // get _id , token 
     signinUser( user:Iuser ) :any {
         var headers = new Headers();
         headers.append('Content-Type','application/json');
@@ -80,16 +83,42 @@ export class AuthService {
 
 
    
-    facebookSigninOrSignup(user : Iuser): any {
-        // Signin Or Signup in server
-        // get _id , token 
-        var headers = new Headers();
-        headers.append('Content-Type','application/json');
-        return this._http.post(environment.url + '/users/facebookSigninOrSignup' , user , {headers :headers})
-            .map((res:Response) => res.json())
+    // get facebook user data
+    // create new user opjecy
+    // use facebookSigninOrSignup
+    // to find User in database or create new User
+    // get _id , token 
+    facebookSigninOrSignup(): Observable<any> {
+        return new Observable( observable => {
+
+            // get user from facebook
+            // create new user opject
+            this._socialAuthService.login('facebook')
+                .subscribe(( FBuser : any ) => {
+                    let user = {
+                        facebook : {
+                            id : FBuser.uid,
+                            token : FBuser.token
+                        },
+                        name : FBuser.first_name +' '+ FBuser.last_name ,
+                        email : FBuser.email || FBuser.uid,
+                        image : `http://graph.facebook.com/${FBuser.uid}/picture?type=large&redirect=true&width=300&height=300`
+                    };
+
+                    // Signin Or Signup in server
+                    // get _id , token 
+                    var headers = new Headers();
+                    headers.append('Content-Type','application/json');
+                    return this._http.post(environment.url + '/users/facebookSigninOrSignup' , user , {headers :headers})
+                        .map((res:Response) => res.json())
+                        .subscribe( user => {
+                            observable.next(user);
+                            observable.complete();
+                        })
+                })
+
+            });
     };
-
-
 
 
 
