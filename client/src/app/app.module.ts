@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { UserComponent } from './user/user.component';
@@ -29,9 +30,10 @@ import {TimeAgoPipe} from 'time-ago-pipe';
 
 import { AuthService as SocialAuthService } from "angular2-social-auth";
 import { Angular2SocialLoginModule } from "angular2-social-auth";
+
 Angular2SocialLoginModule.loadProvidersScripts({
   "facebook": {
-    "clientId": "993583634135321",
+    "clientId": environment.facebook_clientId,
     "apiVersion": "v2.11"  
   }
 });

@@ -6,5 +6,6 @@
 export const environment = {
   production: false ,
   //  if server in dev
-  url : 'http://localhost:3000'
+  url : 'http://localhost:3000' , 
+  facebook_clientId :  '993583634135321'
 };
