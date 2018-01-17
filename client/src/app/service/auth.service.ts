@@ -59,7 +59,7 @@ export class AuthService {
         localStorage.clear();
         this._chatService.io.disconnect();
         this._router.navigate(['/user' , 'signin']);
-        window.location.reload();
+        window.location.replace('/');
     }
 
 

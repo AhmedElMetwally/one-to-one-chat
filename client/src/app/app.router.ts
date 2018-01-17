@@ -14,7 +14,7 @@ import { AboutComponent } from './about/about.component';
 export const routing : Routes = [
     {
         path : '' , 
-        redirectTo : 'about',
+        redirectTo : 'user',
         pathMatch:'full' 
     },
     {

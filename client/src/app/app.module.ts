@@ -30,7 +30,6 @@ import {TimeAgoPipe} from 'time-ago-pipe';
 
 import { AuthService as SocialAuthService } from "angular2-social-auth";
 import { Angular2SocialLoginModule } from "angular2-social-auth";
-
 Angular2SocialLoginModule.loadProvidersScripts({
   "facebook": {
     "clientId": environment.facebook_clientId,
@@ -52,7 +51,8 @@ Angular2SocialLoginModule.loadProvidersScripts({
     AboutComponent,
     BlogComponent,
     ProfileComponent,
-    UserNavbarComponent  
+    UserNavbarComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -60,7 +60,7 @@ Angular2SocialLoginModule.loadProvidersScripts({
     HttpModule,
     RouterModule.forRoot(routing),
     ReactiveFormsModule,
-    Angular2SocialLoginModule
+    Angular2SocialLoginModule,
   ],
   providers: [ 
     IsLoginGuard, 

@@ -106,11 +106,11 @@
         <br>
         
         <!-- form sent message -->
-        <form method="post" (submit)='content.value ? sent(content.value) : false; content.value=""; content.focus();'>
+        <form method="post" (submit)='content.value.trim() ? sent(content.value) : false; content.value=""; content.focus();'>
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Message...." #content >
             <div class="input-group-btn">
-              <button class="btn btn-primary " type="submit">Sent</button>
+              <button class="btn btn-primary " type="s)ubmit">Sent</button>
             </div>
           </div>
         </form>
