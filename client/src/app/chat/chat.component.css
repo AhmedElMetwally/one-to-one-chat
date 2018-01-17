@@ -34,6 +34,7 @@ a.user{
     word-break: break-all;
     margin-bottom: 0
 }
+
 /* the chap af all msg */
 .messages .msg-parent .crop{
     background: #424242;
@@ -42,11 +43,7 @@ a.user{
     margin-left: 3%;
     clip-path: polygon(100% 0, 0 0, 0 100%);
 }
-/* parent my msg */
-.messages .msg-parent.me{
-    margin-left: 30%;
-    text-align: right;
-}
+
 /* chap of my msg */
 .messages .msg-parent.me .crop{
     background: #424242;
@@ -56,6 +53,34 @@ a.user{
     clip-path: polygon(100% 0, 0 0, 100% 100%);
 }
 
+/* phone */
+@media (max-width:600px)  { 
+
+    /* the chap af all msg */
+    .messages .msg-parent .crop{
+        background: #424242;
+        width: 6%;
+        height: 9px;
+        margin-left: 4%;
+        clip-path: polygon(100% 0, 0 0, 0 100%);
+    }
+
+    /* chap of my msg */
+    .messages .msg-parent.me .crop{
+        background: #424242;
+        width: 6%;
+        height: 9px;
+        margin-left: 90%;
+        clip-path: polygon(100% 0, 0 0, 100% 100%);
+    }
+}
+
+
+/* parent my msg */
+.messages .msg-parent.me{
+    margin-left: 30%;
+    text-align: right;
+}
 
 
 /* date */
