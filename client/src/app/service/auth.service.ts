@@ -1,13 +1,12 @@
+import { environment } from './../../environments/environment';
 import { Iuser } from './../Iuser';
 import { ChatService } from './chat.service';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { Http , Headers , Response} from '@angular/http';
 import 'rxjs/add/operator/map';
-import { AuthService as SocialAuthService } from "angular2-social-auth";
 import { Observable } from 'rxjs/Observable';
-
+declare var FB :any;
 
  
 @Injectable()
@@ -15,10 +14,19 @@ export class AuthService {
   constructor(
         private _http:Http , 
         private _router:Router , 
-        private _chatService:ChatService,
-        private _socialAuthService : SocialAuthService ){};
+        private _chatService:ChatService){
+            
+            // init facebook auth config
+            FB.init({
+                appId            : environment.facebook_clientId,
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v2.11'
+            });
+        };
 
 
+    
 
     
     // is login
@@ -84,40 +92,66 @@ export class AuthService {
 
    
     // get facebook user data
-    // create new user opjecy
+    // create new user opject
     // use facebookSigninOrSignup
     // to find User in database or create new User
     // get _id , token 
     facebookSigninOrSignup(): Observable<any> {
         return new Observable( observable => {
-
+           
             // get user from facebook
             // create new user opject
-            this._socialAuthService.login('facebook')
-                .subscribe(( FBuser : any ) => {
-                    let user = {
-                        facebook : {
-                            id : FBuser.uid,
-                            token : FBuser.token
-                        },
-                        name : FBuser.first_name +' '+ FBuser.last_name ,
-                        email : FBuser.email || FBuser.uid,
-                        image : `http://graph.facebook.com/${FBuser.uid}/picture?type=large&redirect=true&width=300&height=300`
-                    };
+            FB.getLoginStatus( _response => {
+                if(_response.status == 'connected'){
+                    FB.api('/me',  response => {
+                        
+                        // create new user opject
+                        let user = {
+                            facebook : {
+                                id : response.id,
+                                token : _response.authResponse.accessToken
+                            },
+                            name : response.name ,
+                            email : response.email || response.uid,
+                            image : `http://graph.facebook.com/${response.id}/picture?type=large&redirect=true&width=300&height=300`
+                        };
 
-                    // Signin Or Signup in server
-                    // get _id , token 
-                    var headers = new Headers();
-                    headers.append('Content-Type','application/json');
-                    return this._http.post(environment.url + '/users/facebookSigninOrSignup' , user , {headers :headers})
-                        .map((res:Response) => res.json())
-                        .subscribe( user => {
-                            observable.next(user);
-                            observable.complete();
-                        })
-                })
 
+                        // Signin Or Signup in server
+                        // get _id , token 
+                        var headers = new Headers();
+                        headers.append('Content-Type','application/json');
+                        this._http.post(environment.url + '/users/facebookSigninOrSignup' , user , {headers :headers})
+                            .map((res:Response) => res.json())
+                            .subscribe( user => {
+                                
+                                // get token and _id
+                                observable.next(user);
+                                observable.complete();
+                            })
+                    });
+                }
             });
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+          
+            
+
+       
+
+        });
     };
 
 

@@ -1,7 +1,6 @@
 import { AuthService } from './../../service/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup , Validators , FormControl } from '@angular/forms';
-import { AuthService as SocialAuthService } from "angular2-social-auth";
 
 
 @Component({
@@ -10,8 +9,7 @@ import { AuthService as SocialAuthService } from "angular2-social-auth";
 })
 export class SignupComponent implements OnInit {
   constructor(
-    private _authService : AuthService,
-    private _socialAuthService : SocialAuthService ){};
+    private _authService : AuthService){};
 
 
   // new signup form

@@ -28,14 +28,13 @@ import {  routing } from './app.router';
 import {TimeAgoPipe} from 'time-ago-pipe';
 
 
-import { AuthService as SocialAuthService } from "angular2-social-auth";
-import { Angular2SocialLoginModule } from "angular2-social-auth";
-Angular2SocialLoginModule.loadProvidersScripts({
-  "facebook": {
-    "clientId": environment.facebook_clientId,
-    "apiVersion": "v2.11"  
-  }
-});
+// import { Angular2SocialLoginModule } from "angular2-social-auth";
+// Angular2SocialLoginModule.loadProvidersScripts({
+//   "facebook": {
+//     "clientId": environment.facebook_clientId,
+//     "apiVersion": "v2.11"  
+//   }
+// });
 
 
 @NgModule({
@@ -60,7 +59,7 @@ Angular2SocialLoginModule.loadProvidersScripts({
     HttpModule,
     RouterModule.forRoot(routing),
     ReactiveFormsModule,
-    Angular2SocialLoginModule,
+    // Angular2SocialLoginModule,
   ],
   providers: [ 
     IsLoginGuard, 
