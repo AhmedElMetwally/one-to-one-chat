@@ -33,8 +33,8 @@ module.exports =  io => {
                 // sent updated user
                 ( decode , cb ) => {
                     User.findByIdAndUpdate({_id : decode.user._id} , {socketId : socket.id} ,  {new: true} , (err , user) => {
-                        cb(err , user)
-                    })
+                        cb(err , user);
+                    });
                 },
                 
                 // get updated user
@@ -118,8 +118,7 @@ module.exports =  io => {
                 });
         })
 
-
-
+        
 
         // on event msg
         // sent msg to caler.socketId

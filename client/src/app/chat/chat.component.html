@@ -11,8 +11,25 @@
       <!-- users block-->
       <div class="col-md-3"  >
        
-        <!-- check if users to display users -->
-        <div *ngIf="users.length" class="users" >
+        <!-- check users btn -->
+        <div  class="users" >
+          
+
+        <!-- check if not users to display no users -->
+        <div>
+          
+          <a class="btn btn-primary center-block hvr-buzz-out user" (click)='newConnect()'>
+            Refresh Users
+            <i class="fa fa-refresh" style="margin-left:5px;color:#77b300"></i>
+          </a>
+
+          <a *ngIf='!users.length' class="btn btn-danger center-block hvr-buzz-out user">
+            No Users
+          </a>
+          
+        </div>
+        <!-- end check users btn  -->
+        
 
           <!-- for loop users -->
           <div *ngFor="let user of users" >
@@ -52,16 +69,6 @@
 
         </div>
         <!-- end check if users to display users  -->
-          
-
-        <!-- check if not users to display no users -->
-        <div *ngIf="!users.length" >
-        
-          <a class="btn btn-danger center-block hvr-buzz-out user">No Users</a>
-        
-        </div>
-        <!-- end check if users to display no users -->
-        
 
       </div>
       <!-- end users block -->
@@ -70,7 +77,7 @@
       
 
       <!-- message body block -->
-      <div class="col-md-9 panel-body"   *ngIf='caller'>
+      <div class="col-md-9 panel-body"   [hidden]='!caller'>
 
         <!-- messages -->
         <div class="messages"  #scrollMe [scrollTop]="scrollMe.scrollHeight">
@@ -106,9 +113,9 @@
         <br>
         
         <!-- form sent message -->
-        <form method="post" (submit)='content.value.trim() ? sent(content.value) : false; content.value=""; content.focus();'>
+        <form method="post" (submit)='inputContent.value.trim() ? sent(inputContent.value) : false; inputContent.value=""; inputContent.focus();'>
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Message...." #content >
+            <input type="text" class="form-control" placeholder="Message...." #inputContent >
             <div class="input-group-btn">
               <button class="btn btn-primary " type="s)ubmit">Sent</button>
             </div>

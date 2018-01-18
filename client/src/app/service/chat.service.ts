@@ -8,10 +8,12 @@ import { Observable } from 'rxjs/Observable';
 import { Iuser } from '../Iuser';
 
 
+
 @Injectable()
 export class ChatService {
   constructor(
     private _http:Http){};
+
 
   // socket.io
   io = io( environment.url );
@@ -19,7 +21,7 @@ export class ChatService {
 
   // login with token
   // get this user with updated socketId
-  socketIO_login(token:string):Observable<Iuser>{
+  socketIO_login(token:string):Observable<Iuser> {
     this.io.emit('login' , token);
     return new Observable(observable => {
       this.io.on('login' , data => {
@@ -48,6 +50,7 @@ export class ChatService {
     });
   };
 
+ 
 
   // get any message receive to thisUser 
   SocketIo_GetMsg():Observable<Imsg>{
@@ -60,10 +63,12 @@ export class ChatService {
   };
 
 
+
   // sent new msg
   SocketIo_SentMsg(msg:Imsg):void{
     this.io.emit('msg' , msg);
   };
+
 
 
   // get any error from socket
@@ -75,6 +80,8 @@ export class ChatService {
     });    
   };
 
+
+  
   
   // get all messages of thisUser and caller
   getMessages( userId , callerId){

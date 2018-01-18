@@ -1,9 +1,8 @@
 import { Iuser } from './../Iuser';
 import { ChatService } from './../service/chat.service';
 import { AuthService } from './../service/auth.service';
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit , ElementRef , ViewChild} from '@angular/core';
 import { environment } from '../../environments/environment';
-
 
 @Component({
   selector: 'app-chat',
@@ -11,6 +10,9 @@ import { environment } from '../../environments/environment';
   styleUrls : ['chat.component.css']
 })
 export class ChatComponent implements OnInit {
+  @ViewChild('inputContent') _inputContent: ElementRef;
+
+
   _id: string ;
   user: Iuser;
   users:Iuser[] = [];
@@ -18,8 +20,8 @@ export class ChatComponent implements OnInit {
   messages:any[] = [];
 
   constructor(  
-    private _chatService:ChatService,
-    private _authService:AuthService ){
+    private _chatService : ChatService,
+    private _authService : AuthService){
 
 
     // login in socket io
@@ -32,11 +34,13 @@ export class ChatComponent implements OnInit {
       })
 
 
+
     // on refresh event ( ant socket connect or disconnect)
     this._chatService.socketIO_refresh()
       .subscribe( users => {
         this.users = users;
-      })
+      });
+
 
 
     // if thisUser receive the msg
@@ -48,9 +52,10 @@ export class ChatComponent implements OnInit {
           // if this msg to his caller
           if(this.caller._id == msg.user._id){
             this.messages.push(msg);
-          } 
-        }
-      })
+          } ;
+        };
+      });
+
 
 
     // if any error from socket
@@ -63,7 +68,8 @@ export class ChatComponent implements OnInit {
       });
     
 
-  };
+  }; // end constructor
+
 
 
   // push this msg in messages to display
@@ -74,16 +80,18 @@ export class ChatComponent implements OnInit {
       user : this.user,
       caller : this.caller,
       created : new Date().toISOString()
-    }
+    };
     this._chatService.io.emit('msg' ,msg);
     this.messages.push(msg);
-   };
+  };
   
+
   // set this user in caller
   // get all messages of thisUser and caller
   call(caller):void{
     this.messages = [];
     this.caller = caller;
+
     this._chatService.getMessages( this._id , caller._id)
       .subscribe(messages => {
         
@@ -91,8 +99,30 @@ export class ChatComponent implements OnInit {
         // and user is sent msg
         // this code display new msg with Response messages
         this.messages = [ ...messages , ...this.messages];
+
+        // fouces the input message
+        this._inputContent.nativeElement.focus();
       });
   };
+
+
+  //new connect
+  newConnect() :void{
+
+    // login in socket io
+    // sent token 
+    // update socketId in user DB
+    // get thisUser
+    this._chatService.io.connect()
+    this._chatService.socketIO_login( localStorage.getItem('token') )
+      .subscribe( user => {
+        console.log('new connect socket.io')
+        this.user = user;
+      });
+
+  };
+
+
 
   // end the call 
   // delete caller

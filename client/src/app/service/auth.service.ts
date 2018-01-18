@@ -6,24 +6,43 @@ import { Injectable } from '@angular/core';
 import { Http , Headers , Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
-declare var FB :any;
 
+declare var FB :any   ;
+declare global {
+    interface Window { fbAsyncInit: any; }
+}
  
+
+
 @Injectable()
 export class AuthService {
   constructor(
         private _http:Http , 
         private _router:Router , 
         private _chatService:ChatService){
-            
+
             // init facebook auth config
-            FB.init({
-                appId            : environment.facebook_clientId,
-                autoLogAppEvents : true,
-                xfbml            : true,
-                version          : 'v2.11'
-            });
-        };
+            window.fbAsyncInit = function() {
+                FB.init({
+                  appId      : environment.facebook_clientId,
+                  cookie     : true,
+                  xfbml      : true,
+                  version    : 'v2.11'
+                });
+                FB.AppEvents.logPageView();   
+              };
+              (function(d, s, id){
+                 var js, fjs = d.getElementsByTagName(s)[0];
+                 if (d.getElementById(id)) {return;}
+                 js = d.createElement(s); js.id = id;
+                 js.src = "https://connect.facebook.net/en_US/sdk.js";
+                 fjs.parentNode.insertBefore(js, fjs);
+               }(document, 'script', 'facebook-jssdk'));
+
+ 
+
+        }; // end constructor
+
 
 
     
@@ -101,7 +120,7 @@ export class AuthService {
            
             // get user from facebook
             // create new user opject
-            FB.getLoginStatus( _response => {
+            FB.login( _response => {
                 if(_response.status == 'connected'){
                     FB.api('/me',  response => {
                         
@@ -129,8 +148,10 @@ export class AuthService {
                                 observable.next(user);
                                 observable.complete();
                             })
+
+
                     });
-                }
+                };
             });
 
 
