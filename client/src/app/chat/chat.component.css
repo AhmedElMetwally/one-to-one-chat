@@ -95,6 +95,13 @@ a.user{
     .me .img-msg{
         float: right;
     }
+    .img-msg{
+        float: left;
+    }
+    
+    .content{
+        margin-left: 40px;
+    }
     .me .content{
         margin-right: 40px;
     }
