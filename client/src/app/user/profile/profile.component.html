@@ -1,21 +1,182 @@
 
 <div class="panel panel-default"  *ngIf="user">
   <div class="panel-heading">
-      <!-- <h3 class="panel-title"> Ahmed El Metwally </h3> -->
+      <h3 class="panel-title text-center hidden-xs" > {{ user.name  }} </h3>
+      <h5 class="panel-title text-center visible-xs" > {{ user.name  }} </h5>
   </div>
   <div class="panel-body">
       <div class="row">
-          <div class=" col-md-4">
-              <img class='img-thumbnail' [src]='user.image' alt="profile image" style="padding: 15px;">
-              <button type="file"  class="btn btn-primary btn-block hvr-buzz-out" target="_blank">Edit Image</button>
-          </div>
-          <div class=" col-md-8">
-              <br>
-              <ul class="list-group">
-                  <li class="list-group-item"  ><strong> Username : </strong> {{ user.name  }} </li>
-                  <li class="list-group-item" ><strong> Email : </strong>{{ user.email  }}</li>
-              </ul>
-          </div>
-      </div>
-  </div>
+            <div class=" col-md-4">
+                <img class='img-thumbnail' [src]='user.image' alt="profile image" style="padding: 15px;">
+                <button type="file"  class="btn btn-primary btn-block hvr-buzz-out" target="_blank">Edit Image</button>
+             </div>
+            <div class=" col-md-8">
+                <br>
+                <ul class="list-group">
+                    
+                    <li class="list-group-item" >
+                        <!-- row -->
+                        <div class="row">
+                            <div class="col-md-10">
+                                <strong> 
+                                    UserName : 
+                                </strong>
+
+                                <span [hidden]='!EditUser.name' >
+                                    {{ user.name  }}
+                                </span>
+
+                                <input 
+                                    type="text" 
+                                    [hidden]='EditUser.name'   
+                                    class="edit-input" 
+                                    #inputName 
+                                    value="{{ user.name ? user.name : ''  }}" 
+                                    (keyup)='keyup_updateUser($event , "name" , inputName.value.trim())' 
+                                    
+                                >
+
+                                <small [hidden]="EditUser.name || Valid.name"  class="text-danger"> Must be 5-30 characters</small> 
+                            </div>
+                            <div class="col-md-2">
+                                <a 
+                                    class="btn  edit-btn btn-block hvr-buzz-out btn-primary"  
+                                    (click)='
+                                        EditUser.name  = !EditUser.name ;
+                                        EditUser.name && inputName.value.trim() ?  updateUser( "name" , inputName.value.trim()) : "" ;' 
+                                > 
+                                    {{ user.name? 'Edit' : 'Add'}}
+                                </a>
+                            </div>
+                        </div>
+                        <!-- row -->
+                    </li>
+
+
+                    <li class="list-group-item" >
+                        <!-- row -->
+                        <div class="row">
+                            <div class="col-md-10">
+                                <strong> 
+                                    Email : 
+                                </strong>
+        
+                                <span [hidden]='!EditUser.email' >
+                                    {{ user.email  }}
+                                </span>
+        
+                                <input 
+                                    type="email" 
+                                    [hidden]='EditUser.email'   
+                                    class="edit-input" 
+                                    #inputEmail  
+                                    value="{{ user.email  ? user.email : ''    }}"
+                                    (keyup)='keyup_updateUser($event , "email" , inputEmail.value.trim())' 
+                                    
+                                >
+                                <small [hidden]="EditUser.email || Valid.email"  class="text-danger"> Must be Email</small> 
+                            </div>
+                            <div class="col-md-2">
+                                <a 
+                                    class="btn  edit-btn btn-block hvr-buzz-out btn-primary"  
+                                    (click)=' 
+                                    EditUser.email  = !EditUser.email ;
+                                    EditUser.email && inputEmail.value.trim()  ?  updateUser( "email" , inputEmail.value.trim()) : "" ;' 
+                                > 
+                                    {{ user.email? 'Edit' : 'Add'}}
+                                </a>
+                            </div>                            
+                        </div>
+                        <!-- row -->
+                    </li>
+
+                    
+                    <li class="list-group-item" >
+                        <!-- row -->
+                        <div class="row">
+                            <div class="col-md-10">
+                                <strong> 
+                                    Phone : 
+                                </strong>
+        
+                                <span [hidden]='!EditUser.phone' >
+                                    {{ user.phone  }}
+                                </span>
+        
+                                <input 
+                                    type="text" 
+                                    [hidden]='EditUser.phone'   
+                                    class="edit-input" 
+                                    #inputPhone  
+                                    value="{{ user.phone ? user.phone : ''   }}" 
+                                    (keyup)='keyup_updateUser($event , "phone" , inputPhone.value.trim() )' 
+                                    
+                                >
+                                <small [hidden]="EditUser.phone || Valid.phone"  class="text-danger"> Must be Phone</small> 
+                                
+                                
+                            </div>
+                            <div class="col-md-2">
+                                <a 
+                                    class="btn  edit-btn btn-block hvr-buzz-out btn-primary"  
+                                    (click)=' 
+                                        EditUser.phone  = !EditUser.phone ;
+                                        EditUser.phone && inputPhone.value.trim() ?  updateUser( "phone" , inputPhone.value.trim() ) : "" ' 
+                                > 
+                                    {{ user.phone? 'Edit' : 'Add'}}
+                                </a>
+                            </div>                            
+                        </div>
+                        <!-- row -->
+                    </li>
+
+
+
+                    <li class="list-group-item" >
+
+                        <!-- row -->
+                        <div class="row">
+                            <div class="col-md-10">
+                                <strong> 
+                                    Facebook : 
+                                </strong>
+        
+                                <span [hidden]='!EditUser.facebookAccount' >
+                                    <a href="{{ user.facebookAccount  }}" target="blank" [hidden]='!user.facebookAccount'>
+                                            Click here
+                                    </a> 
+                                </span>
+        
+                                <input 
+                                    type="text" 
+                                    [hidden]='EditUser.facebookAccount'   
+                                    class="edit-input" 
+                                    #inputFacebookAccount  
+                                    value="{{ user.facebookAccount ? user.facebookAccount : ''  }}" 
+                                    (keyup)='keyup_updateUser($event , "facebookAccount" , inputFacebookAccount.value.trim())' 
+                                
+                                >
+                                <small [hidden]="EditUser.facebookAccount || Valid.facebookAccount"  class="text-danger"> Must be url</small> 
+                            </div>
+                            <div class="col-md-2">
+                                <a 
+                                    class="btn  edit-btn btn-block hvr-buzz-out btn-primary"  
+                                    (click)='
+                                        EditUser.facebookAccount  = !EditUser.facebookAccount ;
+                                        EditUser.facebookAccount && inputFacebookAccount.value.trim() ?  updateUser( "facebookAccount" , inputFacebookAccount.value.trim() ) : "" ' 
+                                >
+                                    {{ user.facebookAccount? 'Edit' : 'Add'}}
+                                </a>
+                            </div>                            
+                        </div>
+                        <!-- row -->
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+

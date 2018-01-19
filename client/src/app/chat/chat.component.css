@@ -1,98 +1,101 @@
-/* users */
 a.user{
-    width: 80%;
+    width: 90%;
     padding: 10px 10px;
     margin-top: 8px ;
     margin-bottom: 8px ;
 }
 
-.messages{
+#users{
+    height: 400px;
+    overflow-y: auto;
+}
+
+#messages{
+    height: 400px;
+}
+
+#parent-messages{
+    height: 350px;
+    overflow-y: auto;
+}
+#sent-message{
+    margin-top: 10px
+}
+
+.msg{
     padding: 10px;
-    height: 280px;
-    overflow-y: auto;
-}
-
-.users{
-    height: 370px;
-    overflow-y: auto;
-}
-
-
-
-/* parent of all msg */
-.messages .msg-parent{
-    width: 70%;
-    margin-bottom: 15px
-}
-/* all msg */
-.messages .msg-parent .msg{
+    margin-top: 13px;
     background: #424242;
+    border-radius: 6px;
     color: white;
-    font-size: 15px;
-    border-radius: 8px;
-    padding: 10px 15px;
     word-break: break-all;
-    margin-bottom: 0
+    font-size: 15px;
 }
-
-/* the chap af all msg */
-.messages .msg-parent .crop{
+ 
+.other .crop{
     background: #424242;
     width: 3%;
-    height: 11px;
+    height: 13px;
     margin-left: 3%;
     clip-path: polygon(100% 0, 0 0, 0 100%);
-}
 
-/* chap of my msg */
-.messages .msg-parent.me .crop{
+}
+.me .crop{
     background: #424242;
     width: 3%;
-    height: 11px;
-    margin-left: 94%;
+    height: 13px;
+    margin-left: 95%;
     clip-path: polygon(100% 0, 0 0, 100% 100%);
 }
 
-/* phone */
+.img-msg{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: auto;
+}
+
+.date{
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 10px;
+    padding-top: 5px;
+}
+
+
+
+
 @media (max-width:600px)  { 
-
-    /* the chap af all msg */
-    .messages .msg-parent .crop{
+    .other .crop{
         background: #424242;
-        width: 6%;
-        height: 9px;
-        margin-left: 4%;
+        width: 5%;
+        height: 11px;
+        margin-left: 5%;
         clip-path: polygon(100% 0, 0 0, 0 100%);
+    
     }
-
-    /* chap of my msg */
-    .messages .msg-parent.me .crop{
+    .me .crop{
         background: #424242;
-        width: 6%;
-        height: 9px;
+        width: 5%;
+        height: 11px;
         margin-left: 90%;
         clip-path: polygon(100% 0, 0 0, 100% 100%);
     }
+    #parent-messages{
+        margin-top: 35px;
+    }
+    #messages{
+        height: 430px;
+    }
+    .img-msg{
+        width: 30px;
+        height: 30px;
+        margin: 0;
+        margin-bottom: 7px;
+    }
+    .me .img-msg{
+        float: right;
+    }
+    .me .content{
+        margin-right: 40px;
+    }
 }
-
-
-/* parent my msg */
-.messages .msg-parent.me{
-    margin-left: 30%;
-    text-align: right;
-}
-
-
-/* date */
-.messages .date{
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 10px;
-    padding-top: 7px;
-    width: 100%;
-    display: inline-block;
-    text-align: right;
-}
-.messages .msg-parent.me  .date{
-    text-align: left
-}
- 

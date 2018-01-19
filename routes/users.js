@@ -159,21 +159,31 @@ router.get('/ckeckAuth' , function(req,res){
 
 router.get('/find' , (req , res) => {
   // get user with his data
-
   let { _id } = req.query;
   User.findById(_id)
     .lean()
-    .then(user => {
-      if(user){
-        user.password = '';
-        res.status(200).json({user : user});
+    .exec( (err , user) => {
+      if(err){
+        res.status(200).json({err : err , status: false });
       }else{
-        res.status(401).json('Not Found');
-      }
-    })
-    .catch(err => {
-      res.status(401).json(err);
+        res.status(200).json({user : user , status : !!user });
+      };
     });
+});
+
+
+router.post('/update' , (req , res) => {
+  // get user with his _id
+  // update user
+
+  let { _id } = req.query;
+  User.update({_id : _id} , req.body , (err , result) => {
+    if(err){
+      res.status(200).json({err : err ,status : false });
+    }else{
+      res.status(200).json({result : result ,status : true });
+    };
+  });
 });
 
 

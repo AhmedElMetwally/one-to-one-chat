@@ -7,14 +7,23 @@ import { Iuser } from '../Iuser';
 @Injectable()
 export class ProfileService {
 
-  constructor(private _http:Http){};
+    constructor(private _http:Http){};
 
-  getUser(){
-    var headers = new Headers();
-    headers.append('Content-Type','application/json');
-    return this._http.get(`${environment.url}/users/find?_id=${localStorage.getItem('_id')}`,{ headers : headers})
-        .map((res:Response) => res.json())
-    };
+    getUser(){
+        var headers = new Headers();
+        headers.append('Content-Type','application/json');
+        return this._http.get(`${environment.url}/users/find?_id=${localStorage.getItem('_id')}`,{ headers : headers})
+            .map((res:Response) => res.json())
+    }; 
+    
+    updateUser( key , value){
+        let update = {};
+        update[key] = value;
+        var headers = new Headers();
+        headers.append('Content-Type','application/json');
+        return this._http.post(`${environment.url}/users/update?_id=${localStorage.getItem('_id')}`, update,{ headers : headers})
+            .map((res:Response) => res.json())
+    }
 
 
 }

@@ -74,23 +74,29 @@ export class ChatComponent implements OnInit {
 
   // push this msg in messages to display
   // sent new msg to caller
-  sent(content):void{
-    let msg = {
-      content : content,
-      user : this.user,
-      caller : this.caller,
-      created : new Date().toISOString()
+  sent():void{
+    if(this._inputContent.nativeElement.value.trim()){
+      let msg = {
+        content : this._inputContent.nativeElement.value.trim(),
+        user : this.user,
+        caller : this.caller,
+        created : new Date().toISOString()
+      };
+      this._chatService.io.emit('msg' ,msg);
+      this.messages.push(msg);
+      this._inputContent.nativeElement.value = '';
+      this._inputContent.nativeElement.focus();
     };
-    this._chatService.io.emit('msg' ,msg);
-    this.messages.push(msg);
   };
   
 
   // set this user in caller
   // get all messages of thisUser and caller
-  call(caller):void{
+  call(caller) :void{
     this.messages = [];
     this.caller = caller;
+
+    //user._id == caller?._id ? clearCaller() : call(user);
 
     this._chatService.getMessages( this._id , caller._id)
       .subscribe(messages => {

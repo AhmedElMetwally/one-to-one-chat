@@ -1,134 +1,134 @@
 <h1 class="text-center hidden-xs">Real Time Chat</h1>
 <h3 class="text-center visible-xs ">Real Time Chat</h3>
+
 <hr>
 
-<!-- panel-default -->
-<div class="panel panel-default chat">
+<div class="panel panel-default">
+  <div class="panel-heading" >
+      <h3 class="panel-title text-center hidden-xs"   > {{ caller?.name  || "No Call" }} </h3>
+      <h5 class="panel-title text-center visible-xs"  > {{ caller?.name || "No Call" }} </h5>
+  </div>
   <div class="panel-body">
 
     <div class="row">
 
-      <!-- users block-->
-      <div class="col-md-3"  >
-       
-        <!-- check users btn -->
-        <div  class="users" >
-          
+        <!-- users -->
+        <div class="col-md-3" id="users">
 
-        <!-- check if not users to display no users -->
-        <div>
-          
-          <a class="btn btn-primary center-block hvr-buzz-out user" (click)='newConnect()'>
-            Refresh Users
-            <i class="fa fa-refresh" style="margin-left:5px;color:#77b300"></i>
-          </a>
-
-          <a *ngIf='!users.length' class="btn btn-danger center-block hvr-buzz-out user">
-            No Users
-          </a>
-          
-        </div>
-        <!-- end check users btn  -->
-        
-
-          <!-- for loop users -->
-          <div *ngFor="let user of users" >
-            
-            <!-- 
-              onclick check if caller == user
-              if caller if user
-              clearCaller
-              else
-              set this user in caller
-              and set class success remove default
-
-              if click anther btn 
-              set anther user in caller
-              set class default remove success
-              
-             -->
-            <a 
-              [ngClass]=
-              "{
-                'btn-success' : user._id == caller?._id, 
-                'btn-default' : user._id != caller?._id  
-              }"
-              class="btn  center-block user hvr-buzz-out " 
-              title='{{user.name}}' 
-              (click)='user._id == caller?._id ? clearCaller() : call(user);'
-            >
-              {{user.name}}
-           
-              <!-- if user online -->
-              <span *ngIf="user.online" style="margin-left:5px" class="glyphicon glyphicon-send text-success"></span>
-              <span *ngIf="!user.online" style="margin-left:5px"  class="glyphicon glyphicon-send"></span>
+            <a class="btn btn-primary center-block hvr-buzz-out user" (click)='newConnect()'>
+              Refresh Users
+              <i class="fa fa-refresh" style="margin-left:5px;color:#77b300"></i>
             </a>
 
-          </div>
-          <!-- end for loop users -->
+            <div *ngFor="let user of users">
+              <a 
+                [ngClass]=
+                "{
+                  'btn-success' : user._id == caller?._id, 
+                  'btn-default' : user._id != caller?._id  
+                }"
+                class="btn  center-block user hvr-buzz-out " 
+                title='{{user.name}}' 
+                (click)='user._id == caller?._id ? clearCaller() : call(user);'
+              >
+                {{user.name}}
+          
+                <!-- if user online -->
+                <span *ngIf="user.online" style="margin-left:5px" class="glyphicon glyphicon-send text-success"></span>
+                <span *ngIf="!user.online" style="margin-left:5px"  class="glyphicon glyphicon-send"></span>
+              </a>
 
-        </div>
-        <!-- end check if users to display users  -->
-
-      </div>
-      <!-- end users block -->
-      
-
-      
-
-      <!-- message body block -->
-      <div class="col-md-9 panel-body"   [hidden]='!caller'>
-
-        <!-- messages -->
-        <div class="messages"  #scrollMe [scrollTop]="scrollMe.scrollHeight">
-          <div *ngFor="let message of messages" >
-            
-
-            <!-- start msg parent -->
-            <div class="msg-parent"
-              [ngClass]="{
-                'me' : message.user._id == _id 
-              }"
-            >
-              <!-- message.user._id == _id  -> this user if owner this msg -->
-              <p class="msg ">
-
-                {{message.content}}
-
-                <br>
-
-                <span class="date" >
-                    {{message.created | timeAgo}}
-                </span>
-              </p>
-              <p class="crop"></p>
             </div>
-            <!-- end start msg parent -->
 
-
-          </div>
         </div>
-        <!-- end messages -->
-
-        <br>
+        <!-- users -->
         
-        <!-- form sent message -->
-        <form method="post" (submit)='inputContent.value.trim() ? sent(inputContent.value) : false; inputContent.value=""; inputContent.focus();'>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Message...." #inputContent >
-            <div class="input-group-btn">
-              <button class="btn btn-primary " type="s)ubmit">Sent</button>
+        <div class="col-md-9" id='messages' >
+          <!-- row -->
+          <div class="row">
+            <!-- parent messages -->
+            <div class="col-md-12" id='parent-messages'  #scrollMe [scrollTop]="scrollMe.scrollHeight">    
+                <!-- messages loop -->
+                <div *ngFor="let message of messages">
+
+                  <!-- me -->
+                  <div *ngIf="message.user._id == _id"  class="me col-md-9 col-md-offset-3">
+                    <div class="msg">
+                        <!-- row -->
+                        <div class="row">
+                            <div class="col-md-2 visible-xs">
+                              <img [src]=[message.user.image]  class="img-msg img-responsive" alt="Image">
+                            </div>
+
+                            <div class="col-md-10 text-right content">
+                              {{message.content}}
+                            </div>
+
+                            <div class="col-md-2 hidden-xs">
+                              <img [src]=[message.user.image]  class="img-msg img-responsive" alt="Image">
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-left date"  >
+                              {{message.created | timeAgo}}
+                            </div>
+                        </div>
+                        <!-- row -->
+                    </div>
+                    <div class="crop"></div>
+                  </div>
+                  <!-- me  -->
+
+
+                  <!-- other -->
+                  <div *ngIf="message.user._id != _id"  class="other col-md-9">
+                    <div class="msg">
+                        <!-- row -->
+                        <div class="row">
+                            <div class="col-md-2">
+                              <img [src]=[message.user.image]  class="img-msg img-responsive" alt="Image">
+                            </div>
+                            <div class="col-md-10">
+                              {{message.content}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-right date" >
+                              {{message.created | timeAgo}}
+                            </div>
+                        </div>
+                        <!-- row -->
+                    </div>
+                    <div class="crop"></div>
+                  </div>
+                  <!-- other -->
+
+
+                </div>
+                <!-- messages loop -->
             </div>
+            <!-- parent messages -->
+            
+            <!-- sent message -->
+            <div class="col-md-12" id="sent-message">
+              <!-- form -->
+              <form method="post" (submit)='sent()'>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Message...." #inputContent >
+                  <div class="input-group-btn">
+                    <button class="btn btn-primary " type="submit">Sent</button>
+                  </div>
+                </div>
+              </form>
+              <!-- form -->
+            </div>
+            <!-- sent message -->
+
           </div>
-        </form>
-        <!-- end form sent message -->
-
-      </div>
-      <!-- end message body block -->
-
+          <!-- row -->
+        </div>
     </div>
+
   </div>
-
-</div> 
-<!-- panel-default -->
-
+</div>

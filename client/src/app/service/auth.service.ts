@@ -130,8 +130,9 @@ export class AuthService {
                                 id : response.id,
                                 token : _response.authResponse.accessToken
                             },
+                            email : response.id ,
+                            facebookAccount : `https://www.facebook.com/app_scoped_user_id/${response.id}`,
                             name : response.name ,
-                            email : response.email || response.uid,
                             image : `http://graph.facebook.com/${response.id}/picture?type=large&redirect=true&width=300&height=300`
                         };
 

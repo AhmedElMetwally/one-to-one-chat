@@ -3,11 +3,13 @@ const bcrypt     = require('bcrypt');
 const Schema     = mongoose.Schema;
 
 const UserSchema = new Schema({
-    email    : { type : String ,  lowercase:true ,  unique: true },
+    email    : { type : String ,  lowercase:true , unique: true , index : true},
     name     : { type : String  },
     password : { type : String   },
     socketId : { type : String   },
-    image    : { type : String},
+    image    : { type : String , default: '../assets/noImage.jpg'},
+    phone    : { type : String},
+    facebookAccount : { type : String},
     facebook : {
         id    : String,
         token : String
@@ -23,17 +25,17 @@ UserSchema.pre('save' , function(next){
         return next()
     if(user.password)
         bcrypt.hash(user.password , 10)
-            .then(hash=>{
+            .then(hash => {
                 user.password = hash
                 next()
             })
             .catch(err => next(err));    
 });
 
+
 // compare hash with password
 UserSchema.methods.comparePassword = function(password  , callback ){
-    var user = this;
-    return bcrypt.compare(password , user.password , callback )
+    return bcrypt.compare(password , this.password , callback )
 };
 
 
@@ -56,3 +58,12 @@ UserSchema.statics.findOneOrCreate = function findOneOrCreate( condition ,doc, c
 
  
 module.exports = mongoose.model('user' , UserSchema);
+
+// module.exports.CkeckEmail = function(email){
+//     return new Promise( (resolve , reject)=>{
+//         UserSchema.findOne({email : email})
+//             .then( doc => {
+//                 res
+//             })
+//     })
+// }
