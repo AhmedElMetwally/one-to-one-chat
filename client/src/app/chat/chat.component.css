@@ -105,4 +105,11 @@ a.user{
     .me .content{
         margin-right: 40px;
     }
+    .me{
+        width: 80%;
+        margin-left: 20%
+    }
+    .other{
+        width: 80%;
+    }
 }
