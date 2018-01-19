@@ -47,7 +47,7 @@
           <!-- row -->
           <div class="row">
             <!-- parent messages -->
-            <div class="col-md-12" id='parent-messages'  #scrollMe [scrollTop]="scrollMe.scrollHeight">    
+            <div *ngIf="messages"  class="col-md-12" id='parent-messages'  #scrollMe [scrollTop]="scrollMe.scrollHeight">    
                 <!-- messages loop -->
                 <div *ngFor="let message of messages">
 
@@ -111,7 +111,7 @@
             <!-- parent messages -->
             
             <!-- sent message -->
-            <div class="col-md-12" id="sent-message">
+            <div class="col-md-12" id="sent-message" [hidden]="!caller" >
               <!-- form -->
               <form method="post" (submit)='sent()'>
                 <div class="input-group">

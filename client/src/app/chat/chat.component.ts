@@ -99,7 +99,7 @@ export class ChatComponent implements OnInit {
     //user._id == caller?._id ? clearCaller() : call(user);
 
     this._chatService.getMessages( this._id , caller._id)
-      .subscribe(messages => {
+      .subscribe( messages => {
         
         // if Response is wait
         // and user is sent msg
