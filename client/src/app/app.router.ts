@@ -1,5 +1,5 @@
 import { ProfileComponent } from './user/profile/profile.component';
-import { BlogComponent } from './blog/blog.component';
+import { TweetComponent } from './tweet/tweet.component';
 import { LogoutComponent } from './user/logout/logout.component';
 import { SignupComponent } from './user/signup/signup.component';
 import { ChatComponent } from './chat/chat.component';
@@ -53,8 +53,8 @@ export const routing : Routes = [
         canActivate : [IsLoginGuard] 
     },
     {
-        path : 'blog' , 
-        component : BlogComponent 
+        path : 'tweet' , 
+        component : TweetComponent 
     },
     {
         path : 'about' , 

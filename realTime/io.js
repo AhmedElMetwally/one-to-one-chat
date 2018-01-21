@@ -3,10 +3,14 @@ const Message = require('../module/message');
 const async = require('async');
 const jwt = require('jsonwebtoken');
 const secret = process.env.secret;
+const Tweet = require('../module/tweet');
+
 
 
 module.exports =  io => {
     io.on('connection', socket => {
+
+
 
         // on event login
         // get token
@@ -74,8 +78,6 @@ module.exports =  io => {
             });
 
         });
-
-
 
 
         
@@ -150,8 +152,31 @@ module.exports =  io => {
         });
 
 
+        // get new tweet from any user
+        // emit this tweet to all anther users
+        // save new tweet -> (relace user with user._id) to save userId in tweet DB 
+        socket.on('tweet' , tweet => {
+            async.parallel([
+                () => {
+                    // emit to all anther user
+                    socket.broadcast.emit('tweet' , tweet);
+                },
+                () => {
+                    // relace user with user_id
+                    tweet.user = tweet.user._id;
 
+                    // save new tweet
+                    Tweet.create(tweet, (err , tweet) => {
+                        if(err){
+                            socket.emit('err' ,  {err : err , event : 'tweet'});
+                        };
+                    });
+                }
+            ]);
+        });
+  
 
+        
 
 
     });

@@ -7,13 +7,29 @@ const secret = process.env.secret;
 const async = require('async');
 
 
-// sign up
+
+// ckeck if token is good 
+// run next function
+// if token is bad stop here 
+// sent status false
+const ckeckToken = ( req , res , next ) => {
+  jwt.verify(req.headers['token'] , secret , (err , user) => {
+    if(err){
+        res.status(200).json({err : err , status : false});
+    }else{
+        next();
+    };
+  });
+};
+
+
+
+// get user from client
+// save user
+// create token
+// sent token and _id
 router.post('/signup', function(req, res, next){
   
-  // get user from client
-  // save user
-  // create token
-  // sent token and _id
   async.waterfall([
 
     // save new user
@@ -52,14 +68,12 @@ router.post('/signup', function(req, res, next){
 
 
 
-
-// singin
+// get user with email
+// compare pasword
+// get token
+// sent token and _id
 router.post('/signin' , function(req,res){
   
-  // get user with email
-  // compare pasword
-  // get token
-  // sent token and _id
   async.waterfall([
   
     // find user by email
@@ -112,26 +126,24 @@ router.post('/signin' , function(req,res){
  
 
 
-
-router.get('/ckeckAuth' , function(req,res){
-
-  // get token and _id
-  // decode token
-  // find user with _id
-  // compare token _id with user in DB  
+// get token and _id
+// decode token
+// find user with _id
+// compare token _id with user in DB  
+router.get('/ckeckAuth'  , ckeckToken , function(req,res){
 
   async.waterfall([
     
     // decode this token
     cb => {
-      jwt.verify(req.query.token , secret , function(err , decode){
+      jwt.verify(req.headers['token'] , secret , function(err , decode){
         cb(err , decode);
       });
     },
 
     // find user of his _id
     (decode , cb) =>{
-      User.findById( req.query._id , (err , user)=>{
+      User.findById( req.headers['_id'] , (err , user)=>{
         if(user){
           cb(err , user , decode );
         }else{
@@ -156,9 +168,8 @@ router.get('/ckeckAuth' , function(req,res){
 });
 
  
-
-router.get('/find' , (req , res) => {
-  // get user with his data
+// get user with his data
+router.get('/find' , ckeckToken ,(req , res) => {
   let { _id } = req.query;
   User.findById(_id)
     .lean()
@@ -171,11 +182,9 @@ router.get('/find' , (req , res) => {
     });
 });
 
-
-router.post('/update' , (req , res) => {
-  // get user with his _id
-  // update user
-
+// get user with his _id
+// update user
+router.post('/update' , ckeckToken , (req , res) => {
   let { _id } = req.query;
   User.update({_id : _id} , req.body , (err , result) => {
     if(err){
@@ -187,9 +196,15 @@ router.post('/update' , (req , res) => {
 });
 
 
-
+// if this user is in DB
+// get  _id , token
+// ----------------
+// if this user not in DB
+// register thisUser
+// get  _id , token
 router.post('/facebookSigninOrSignup' , (req , res) => {
-
+  
+  
   async.waterfall([
 
     // find user with condition

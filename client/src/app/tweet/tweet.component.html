@@ -1,0 +1,97 @@
+<h1 class="text-center hidden-xs">Tweets</h1>
+<h3 class="text-center visible-xs ">Tweets</h3>
+
+<hr>
+<br>
+
+
+<!-- new tweet form -->
+<div *ngIf="user" >
+
+  <!-- row -->
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+        <!-- form -->
+        <form role="form" autocomplete="off" [formGroup]='myform' (submit)='onSubmit()'>
+              <!-- row -->
+            <div class="row">
+                <!-- input -->
+                <div class="col-xs-12">
+                  <div class="form-group">
+                    <input type="text" #tweet formControlName='tweet' id='input-tweet' class="form-control"  placeholder="Tweet...">
+                    <small
+                      class=" text-right counter"
+                      [ngClass]="{
+                        'text-success' : myform.controls.tweet.valid ,
+                        'text-danger'  : !myform.controls.tweet.valid 
+                      }"                   > 
+                      {{  200 - tweet.value.length }} 
+                    </small> 
+                  </div>
+                </div>
+                <!-- input -->
+                <!-- submit -->
+                <div class="col-xs-6 col-xs-offset-3 col-md-4 col-md-offset-4">
+                  <button type="submit" class="btn btn-block hvr-buzz-out btn-primary">Tweet</button>
+                </div>
+                <!-- submit -->
+            </div>
+        </form>
+        <!-- form -->
+    </div>
+  </div>
+  <!-- row -->
+  <hr>
+
+</div>
+<!-- new tweet form -->
+
+
+<!-- tweets -->
+<div *ngIf="tweets" >
+  
+  <div *ngFor="let tweet of tweets" >
+
+    <!-- row  tweet-->
+    <div class="row" style="margin:0">
+
+      <div class="col-md-8 col-md-offset-2">
+        
+        <!-- row -->
+        <div class="row tweet">
+            <!-- image -->
+            <div class="col-md-2 col-xs-3 ">
+              <img [src]='tweet.user.image'  class="img-responsive img" alt="Image">
+            </div>
+            
+            <!-- name -->
+            <div class="col-md-10 col-xs-9  name">
+                {{tweet.user.name}}
+            </div>
+
+            <!-- content -->
+            <div class="col-md-10 col-xs-9  content">
+                {{tweet.content}}
+            </div>
+
+            <!-- date -->
+            <div class="col-md-12  col-xs-12 text-right date">
+              {{tweet.created | timeAgo }}
+            </div>
+
+        </div>
+        <!-- row -->
+
+      </div>
+
+    </div>
+    <!-- row tweet-->
+
+    <br>
+
+  </div>
+
+
+</div>
+<!-- tweets -->
+

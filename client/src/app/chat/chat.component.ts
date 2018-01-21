@@ -73,7 +73,8 @@ export class ChatComponent implements OnInit {
 
 
   // push this msg in messages to display
-  // sent new msg to caller
+  // sent new msg to caller with event msg to 
+  // api -> io.to(caller.socketId).emit('msg'  , msg )
   sent():void{
     if(this._inputContent.nativeElement.value.trim()){
       let msg = {
@@ -90,42 +91,40 @@ export class ChatComponent implements OnInit {
   };
   
 
+  
   // set this user in caller
   // get all messages of thisUser and caller
   call(caller) :void{
     this.messages = [];
     this.caller = caller;
-
-    //user._id == caller?._id ? clearCaller() : call(user);
-
     this._chatService.getMessages( this._id , caller._id)
-      .subscribe( messages => {
-        
-        // if Response is wait
-        // and user is sent msg
-        // this code display new msg with Response messages
-        this.messages = [ ...messages , ...this.messages];
-
+      .subscribe( data => {
+        if(data.status){
+          // if messages api is wait
+          // and user is sent msg
+          // this code display new msg with Response messages
+          this.messages = [ ...data.messages , ...this.messages];
+        }else{
+          console.log(data.err);
+        };
         // fouces the input message
         this._inputContent.nativeElement.focus();
       });
   };
 
 
-  //new connect
-  newConnect() :void{
 
-    // login in socket io
-    // sent token 
-    // update socketId in user DB
-    // get thisUser
+  // login in socket io
+  // sent token 
+  // update socketId in user DB
+  // get thisUser
+  newConnect() :void{
     this._chatService.io.connect()
     this._chatService.socketIO_login( localStorage.getItem('token') )
       .subscribe( user => {
         console.log('new connect socket.io')
         this.user = user;
       });
-
   };
 
 

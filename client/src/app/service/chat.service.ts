@@ -85,7 +85,10 @@ export class ChatService {
   
   // get all messages of thisUser and caller
   getMessages( userId , callerId){
-    return this._http.get(`${environment.url}/api/messages?userId=${userId}&&callerId=${callerId}`)
+    var headers = new Headers();
+    headers.append('Content-Type','application/json');
+    headers.append('token', localStorage.getItem('token'));
+    return this._http.get(`${environment.url}/api/messages?userId=${userId}&&callerId=${callerId}` , {headers : headers})
       .map((res:Response) => res.json());
   };
 

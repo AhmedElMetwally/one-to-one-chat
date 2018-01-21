@@ -11,7 +11,7 @@
     padding: 0 0;
     padding-left: 3px;
     margin: 0;
-    width:60%
+    width:50%
 }
 
 .panel-body strong{
@@ -22,5 +22,8 @@
     .panel-body .edit-btn{
        margin-top: 7px;
     }
-
+    .error{
+        display: block;
+        margin-top: 7px;
+    }
 }

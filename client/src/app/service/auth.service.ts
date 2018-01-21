@@ -7,16 +7,16 @@ import { Http , Headers , Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 
-declare var FB :any   ;
+declare var FB :any ;
 declare global {
     interface Window { fbAsyncInit: any; }
-}
+};
  
 
 
 @Injectable()
 export class AuthService {
-  constructor(
+    constructor(
         private _http:Http , 
         private _router:Router , 
         private _chatService:ChatService){
@@ -41,17 +41,16 @@ export class AuthService {
 
  
 
-        }; // end constructor
-
-
+    }; // end constructor
 
     
 
-    
     // is login
     isLogin() :boolean {
-        return localStorage.getItem('token') != null 
+        return localStorage.getItem('token') != null &&  localStorage.getItem('_id')  != null ;
     };
+
+
 
     // ckeckAuth
     // if not auth 
@@ -59,9 +58,12 @@ export class AuthService {
     ckeckAuth(){
         var headers = new Headers();
         headers.append('Content-Type','application/json');
-        return this._http.get(`${environment.url}/users/ckeckAuth?token=${localStorage.getItem('token')}&&_id=${localStorage.getItem('_id')}`,{ headers : headers})
+        headers.append('token', localStorage.getItem('token'));
+        headers.append('_id', localStorage.getItem('_id'));
+        return this._http.get(`${environment.url}/users/ckeckAuth`,{ headers : headers})
             .map((res:Response) => res.json());
-    }
+    };
+
 
 
     // login 
@@ -76,7 +78,8 @@ export class AuthService {
         if(navigate){
             this._router.navigate(navigate);
         }
-    }
+    };
+
 
 
     // logout 
@@ -87,7 +90,8 @@ export class AuthService {
         this._chatService.io.disconnect();
         this._router.navigate(['/user' , 'signin']);
         window.location.replace('/');
-    }
+    };
+
 
 
     // sent name email password
@@ -97,8 +101,10 @@ export class AuthService {
         headers.append('Content-Type','application/json');
         return this._http.post(environment.url + '/users/signup' , user , {headers :headers})
           .map((res:Response) => res.json());
-      }
+    };
     
+
+
     // sent email password
     // get _id , token 
     signinUser( user:Iuser ) :any {
@@ -106,7 +112,7 @@ export class AuthService {
         headers.append('Content-Type','application/json');
         return this._http.post(environment.url + '/users/signin' , user , {headers :headers})
             .map((res:Response) => res.json());
-    }
+    };
 
 
    
@@ -154,30 +160,9 @@ export class AuthService {
                     });
                 };
             });
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-          
-            
-
-       
-
         });
     };
 
+    
 
-
-      
-
-}
+};

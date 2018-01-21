@@ -1,3 +1,5 @@
+import { TweetComponent } from './tweet/tweet.component';
+import { TweetService } from './service/tweet.service';
 import { Routes, RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -13,7 +15,6 @@ import { LogoutComponent } from './user/logout/logout.component';
 import { ChatComponent } from './chat/chat.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AboutComponent } from './about/about.component';
-import { BlogComponent } from './blog/blog.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { UserNavbarComponent } from './user/user-navbar/user-navbar.component';
 
@@ -28,14 +29,6 @@ import {  routing } from './app.router';
 import {TimeAgoPipe} from 'time-ago-pipe';
 
 
-// import { Angular2SocialLoginModule } from "angular2-social-auth";
-// Angular2SocialLoginModule.loadProvidersScripts({
-//   "facebook": {
-//     "clientId": environment.facebook_clientId,
-//     "apiVersion": "v2.11"  
-//   }
-// });
-
 
 @NgModule({
   declarations: [
@@ -48,7 +41,7 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     TimeAgoPipe,
     NavbarComponent,
     AboutComponent,
-    BlogComponent,
+    TweetComponent,
     ProfileComponent,
     UserNavbarComponent,
 
@@ -59,7 +52,6 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     HttpModule,
     RouterModule.forRoot(routing),
     ReactiveFormsModule,
-    // Angular2SocialLoginModule,
   ],
   providers: [ 
     IsLoginGuard, 
@@ -67,6 +59,7 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     ChatService , 
     AuthService, 
     ProfileService,
+    TweetService,
   ],
   bootstrap: [AppComponent] 
 })
