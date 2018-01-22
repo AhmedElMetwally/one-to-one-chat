@@ -1,3 +1,4 @@
+import { ViewProfileComponent } from './view-profile/view-profile.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { TweetComponent } from './tweet/tweet.component';
 import { LogoutComponent } from './user/logout/logout.component';
@@ -59,5 +60,9 @@ export const routing : Routes = [
     {
         path : 'about' , 
         component : AboutComponent 
+    },
+    {
+        path : 'viewProfile/:_id' , 
+        component : ViewProfileComponent 
     },
 ];

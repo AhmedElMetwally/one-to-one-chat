@@ -4,14 +4,14 @@ import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/map';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs/Observable';
-import { ProfileService } from './profile.service';
+import { UserService } from './user.service';
 
 
 @Injectable()
 export class TweetService {
   constructor(
     private _http : Http ,
-    private _profileService : ProfileService ){};
+    private _userService : UserService ){};
 
   // connect socket.io to get tweets
   io = io( environment.url );
@@ -49,7 +49,7 @@ export class TweetService {
 
   // get user data from api
   getUser(){
-    return this._profileService.getUser();
+    return this._userService.getUser();
   }; 
 
 };

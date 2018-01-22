@@ -18,7 +18,7 @@
                 <!-- input -->
                 <div class="col-xs-12">
                   <div class="form-group">
-                    <input type="text" #tweet formControlName='tweet' id='input-tweet' class="form-control"  placeholder="Tweet...">
+                    <textarea   #tweet formControlName='tweet' id='input-tweet' class="form-control" ></textarea>
                     <small
                       class=" text-right counter"
                       [ngClass]="{
@@ -66,12 +66,13 @@
             
             <!-- name -->
             <div class="col-md-10 col-xs-9  name">
+              <a  [routerLink]="['/viewProfile', tweet.user._id]" style="color:#888">
                 {{tweet.user.name}}
+              </a>
             </div>
 
             <!-- content -->
-            <div class="col-md-10 col-xs-9  content">
-                {{tweet.content}}
+            <div class="col-md-10 col-xs-9  content" innerHTML='{{tweet.content}}'>
             </div>
 
             <!-- date -->

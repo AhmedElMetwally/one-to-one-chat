@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfileService } from '../../service/profile.service';
+import { UserService } from '../../service/user.service';
 import { Iuser } from '../../Iuser';
 import { isFormattedError } from '@angular/compiler';
 
@@ -9,9 +9,11 @@ import { isFormattedError } from '@angular/compiler';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  constructor(private _profileService:ProfileService) {};
+  constructor(private _userService:UserService) {};
  
   user:Iuser;
+
+
 
   EditMode : any =  {
     name: false ,
@@ -20,12 +22,18 @@ export class ProfileComponent implements OnInit {
     facebookAccount : false
   };
 
+
+
   Valid: any =  {
     name: true ,
     email: true ,
     phone : true,
-    facebookAccount : true
+    facebookAccount : true ,
+    image : true
   };
+
+  progressbar:number = 0;
+
 
   // get value 
   // ckeck value with key in opj
@@ -39,6 +47,8 @@ export class ProfileComponent implements OnInit {
     return opj[ key ].test( value ); 
   };
 
+
+  // on submit new value
   Submit( _editMode , key , value) :void{
 
     // relace space from text
@@ -47,7 +57,7 @@ export class ProfileComponent implements OnInit {
     // when editMode true and valid true
     // submit this value
     if(this.Valid[key] && this.EditMode[key]  ){
-      this._profileService.updateUser(key , value)
+      this._userService.updateUser(key , value)
         .subscribe( data => {
           // if success
           if(data.status && data.result.n == 1){
@@ -64,6 +74,8 @@ export class ProfileComponent implements OnInit {
     this.Valid[key] = true;
   };
   
+
+  // on click enter submit enw value
   Keyup( $event , _editMode , key , value):void{
 
     // set valid of key true or false
@@ -77,11 +89,69 @@ export class ProfileComponent implements OnInit {
   };
 
 
+
+  // on select new img upload it
+  uploadImg($event){
+
+    const getExtension = filename => {
+      var parts = filename.split('.');
+      return parts[parts.length - 1];
+    };
+  
+    const isImage = filename => {
+        var ext = getExtension(filename);
+        switch (ext.toLowerCase()) {
+        case 'jpg':
+        case 'gif':
+        case 'bmp':
+        case 'png':
+            //etc
+            return true;
+        }
+        return false;
+    };
+  
+    // check if user selected Files
+    if($event.target.files.length && isImage($event.target.files[0].name )){
+      console.log('uploading imgage.....');
+
+      // add file
+      var formData = new FormData();
+      formData.append('image' ,$event.target.files[0] , $event.target.files[0].name );
+      
+      // sent form
+      this._userService.uploadImg(formData)
+        .subscribe( data => {
+          // if Done
+          if(data.status){
+            this.Valid.image = true;
+            this.user.image = data.user.image;
+          }else{
+            // if not done display error
+            console.log(data.err);
+          };
+        });
+
+    }else{
+      // if not image 
+      this.Valid.image = false;
+    };
+    
+  };
+
+
+  
   ngOnInit() {
     // get user data
-    this._profileService.getUser()
+    this._userService.getUser()
       .subscribe( data => {
         if(data.status){
+
+          // test for all facebook accounts
+          if(!this.Pattern( "email" , data.user.email)){
+            data.user.email = "";
+          };
+
           this.user = data.user;
         };
       });

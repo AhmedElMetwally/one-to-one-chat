@@ -21,12 +21,14 @@ import { UserNavbarComponent } from './user/user-navbar/user-navbar.component';
 
 import { AuthService } from './service/auth.service';
 import { ChatService } from './service/chat.service';
-import { ProfileService } from './service/profile.service';
+import { UserService } from './service/user.service';
 
 import { IsLoginGuard ,IsNotLoginGuard} from './app.guard';
 import {  routing } from './app.router';
 
 import {TimeAgoPipe} from 'time-ago-pipe';
+import { ViewProfileComponent } from './view-profile/view-profile.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 
 
 
@@ -44,6 +46,8 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     TweetComponent,
     ProfileComponent,
     UserNavbarComponent,
+    ViewProfileComponent,
+    ForgetPasswordComponent,
 
   ],
   imports: [
@@ -58,7 +62,7 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     IsNotLoginGuard , 
     ChatService , 
     AuthService, 
-    ProfileService,
+    UserService,
     TweetService,
   ],
   bootstrap: [AppComponent] 

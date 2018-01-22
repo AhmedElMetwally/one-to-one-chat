@@ -6,6 +6,13 @@ const Message = require('../module/message');
 const secret = process.env.secret;
 const async = require('async');
 
+const cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'hsdayit7q', 
+  api_key: '778798688727479', 
+  api_secret: 'ZnKI3T_IK89d2-sSY980QdVWqWg' 
+});
+
 
 
 // ckeck if token is good 
@@ -13,7 +20,7 @@ const async = require('async');
 // if token is bad stop here 
 // sent status false
 const ckeckToken = ( req , res , next ) => {
-  jwt.verify(req.headers['token'] , secret , (err , user) => {
+  jwt.verify(req.headers['token'] , secret , (err , decode) => {
     if(err){
         res.status(200).json({err : err , status : false});
     }else{
@@ -130,7 +137,7 @@ router.post('/signin' , function(req,res){
 // decode token
 // find user with _id
 // compare token _id with user in DB  
-router.get('/ckeckAuth'  , ckeckToken , function(req,res){
+router.get('/ckeckAuth'  , function(req,res){
 
   async.waterfall([
     
@@ -167,9 +174,10 @@ router.get('/ckeckAuth'  , ckeckToken , function(req,res){
 
 });
 
+
  
 // get user with his data
-router.get('/find' , ckeckToken ,(req , res) => {
+router.get('/find' , ckeckToken , (req , res) => {
   let { _id } = req.query;
   User.findById(_id)
     .lean()
@@ -177,10 +185,13 @@ router.get('/find' , ckeckToken ,(req , res) => {
       if(err){
         res.status(200).json({err : err , status: false });
       }else{
+        user.password = '';
         res.status(200).json({user : user , status : !!user });
       };
     });
 });
+
+
 
 // get user with his _id
 // update user
@@ -194,6 +205,7 @@ router.post('/update' , ckeckToken , (req , res) => {
     };
   });
 });
+
 
 
 // if this user is in DB
@@ -246,6 +258,64 @@ router.post('/facebookSigninOrSignup' , (req , res) => {
   })
 
   
+});
+
+
+
+// get token
+// decode this token and cb user
+// get img
+// upload img and get his url
+// cb user_id , url
+// update image this user with _id  
+// get thisUser
+// sent it with status true
+router.post('/image' , ckeckToken , (req , res) => {
+  
+  async.waterfall([
+    
+    
+    // decode this token and cb user
+    cb => {
+      jwt.verify(req.headers['token'] , secret , (err , decode) => {
+        cb(err , decode.user);
+      });
+    },
+
+
+    // upload img and get his url
+    // cb user_id , url
+    (user , cb) => {
+      let { _id } = user;
+      let { image } = req.files;
+      cloudinary.v2.uploader
+        .upload_stream((err, result) => {
+          cb(err , _id ,result.url);
+        })
+        .end(image.data);
+    },
+
+
+    // update image this user with _id  
+    // get thisUser
+    // cb user
+    ( _id , url , cb ) => {
+      User.findByIdAndUpdate({_id :  _id} , {image : url } ,  {new: true} , (err , user) => {
+        cb(err , user);
+      })
+    }
+
+    // if err status false
+    // if not err status true 
+  ], (err , user) => {
+    if(err){
+      res.status(200).json({status : false , err : err});
+    }else{
+      res.status(200).json({status : true , user : user});
+    };
+  });
+
+
 });
 
 

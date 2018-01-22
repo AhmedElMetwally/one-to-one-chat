@@ -1,0 +1,105 @@
+<div class="row">
+    <div class="text-left col-xs-12">
+        <a class="btn btn-default"  (click)="backClicked()" style="margin-bottom:20px">Back</a>
+    </div>
+</div>
+
+
+<div class="panel panel-default"  *ngIf="user">
+  <div class="panel-heading">
+      <h3 class="panel-title text-center hidden-xs" > {{ user.name  }} </h3>
+      <h5 class="panel-title text-center visible-xs" > {{ user.name  }} </h5>
+  </div>
+
+  <div class="panel-body" >
+      <div class="row">
+            <div class=" col-md-4">
+                <img class='img-thumbnail' [src]='user.image' alt="profile image" style="padding: 15px;">
+             </div>
+            <div class=" col-md-8">
+              <br>
+
+              <ul class="list-group">
+
+                  <!-- ____ li ____ -->
+                  <li class="list-group-item" *ngIf="user.name"  >
+                      <!-- row -->
+                      <div class="row">
+                          <div class="col-md-10 col-xs-12">
+                              <strong> 
+                                  UserName : 
+                              </strong>
+
+                              <span>
+                                  {{ user.name}}
+                              </span>
+                          </div>
+                      </div>
+                      <!-- row -->
+                  </li>
+                  <!-- ____ li ____ -->
+
+                  <!-- ____ li ____ -->
+                  <li class="list-group-item" *ngIf="user.email">
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-md-10 col-xs-12">
+                            <strong> 
+                                Email : 
+                            </strong>
+
+                            <span>
+                                {{ user.email}}
+                            </span>
+                        </div>
+                    </div>
+                    <!-- row -->
+                  </li>
+                  <!-- ____ li ____ -->
+
+                <!-- ____ li ____ -->
+                <li class="list-group-item" *ngIf="user.phone">
+                  <!-- row -->
+                  <div class="row">
+                      <div class="col-md-10 col-xs-12">
+                        <strong> 
+                            Phone : 
+                        </strong>
+
+                        <span>
+                            {{ user.phone}}
+                        </span>
+                      </div>
+                    </div>
+                    <!-- row -->
+                </li>
+                <!-- ____ li ____ -->
+
+
+                <!-- ____ li ____ -->
+                <li class="list-group-item" *ngIf="user.facebookAccount">
+                  <!-- row -->
+                  <div class="row">
+                      <div class="col-md-10 col-xs-12">
+                          <strong> 
+                              Facebook : 
+                          </strong>
+
+                          <span>
+                            <a  target="blank" href="{{ user.facebookAccount}}">
+                              Click Here
+                            </a>
+                          </span>
+                      </div>
+                  </div>
+                  <!-- row -->
+                </li>
+                <!-- ____ li ____ -->
+              </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

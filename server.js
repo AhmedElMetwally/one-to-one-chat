@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const Cors = require('cors');
 const mongoose = require('mongoose');
+const fileUpload = require('express-fileupload');
 require('dotenv').config()
 
 // app
@@ -32,6 +33,7 @@ require('./realTime/io')(io)
 
 
 // middlewares
+app.use(fileUpload());
 app.use(Cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());

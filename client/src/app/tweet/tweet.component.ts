@@ -43,13 +43,14 @@ export class TweetComponent implements OnInit {
   // emit new tweet with socket.io
   // reset form 
   onSubmit(){
+    let value = this.myform.controls.tweet.value;
     
-    if(this.myform.controls.tweet.value){
-      
+    if( value.replace(/\r?\n/g, '') ){
+
       // create tweet object
       let NewTweet = {
         created : new Date().toISOString(),
-        content : this.myform.controls.tweet.value , 
+        content : value.replace(/\r?\n/g, '<br/>'), 
         user : this.user
       };
 
@@ -61,8 +62,9 @@ export class TweetComponent implements OnInit {
 
       // reset my from
       this.myform.reset();    
-    }
-  }
+    };
+
+  };
 
 
 

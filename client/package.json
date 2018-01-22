@@ -29,7 +29,8 @@
     "rxjs": "^5.5.2",
     "socket.io-client": "^2.0.4",
     "time-ago-pipe": "^1.2.1",
-    "zone.js": "^0.8.14"
+    "zone.js": "^0.8.14",
+    "async": "*"
   },
   "devDependencies": {
     "@angular/cli": "1.6.3",

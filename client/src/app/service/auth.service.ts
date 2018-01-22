@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { Http , Headers , Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
+import * as async from "async";
 
 declare var FB :any ;
 declare global {
@@ -122,46 +123,58 @@ export class AuthService {
     // to find User in database or create new User
     // get _id , token 
     facebookSigninOrSignup(): Observable<any> {
+
         return new Observable( observable => {
-           
-            // get user from facebook
-            // create new user opject
-            FB.login( _response => {
-                if(_response.status == 'connected'){
-                    FB.api('/me',  response => {
-                        
-                        // create new user opject
-                        let user = {
-                            facebook : {
-                                id : response.id,
-                                token : _response.authResponse.accessToken
-                            },
-                            email : response.id ,
-                            facebookAccount : `https://www.facebook.com/app_scoped_user_id/${response.id}`,
-                            name : response.name ,
-                            image : `http://graph.facebook.com/${response.id}/picture?type=large&redirect=true&width=300&height=300`
-                        };
-
-
-                        // Signin Or Signup in server
-                        // get _id , token 
-                        var headers = new Headers();
-                        headers.append('Content-Type','application/json');
-                        this._http.post(environment.url + '/users/facebookSigninOrSignup' , user , {headers :headers})
-                            .map((res:Response) => res.json())
-                            .subscribe( user => {
+            async.waterfall([
+                cb => {
+                               
+                    // get user from facebook
+                    // create new user opject
+                    FB.login( _response => {
+                        if(_response.status == 'connected'){
+                            FB.api('/me',  response => {
                                 
-                                // get token and _id
-                                observable.next(user);
-                                observable.complete();
-                            })
+                                // create new user opject
+                                let user = {
+                                    facebook : {
+                                        id : response.id,
+                                        token : _response.authResponse.accessToken
+                                    },
+                                    email : response.id ,
+                                    facebookAccount : `https://www.facebook.com/app_scoped_user_id/${response.id}`,
+                                    name : response.name ,
+                                    image : `http://graph.facebook.com/${response.id}/picture?type=large&redirect=true&width=300&height=300`
+                                };
 
-
+                                cb(null , user);
+                    
+                            });
+                        };
                     });
-                };
-            });
-        });
+                },
+
+                
+                (user , cb) => {
+
+                    // Signin Or Signup in server
+                    // get _id , token 
+                    var headers = new Headers();
+                    headers.append('Content-Type','application/json');
+                    this._http.post(environment.url + '/users/facebookSigninOrSignup' , user , {headers :headers})
+                        .map((res:Response) => res.json())
+                        .subscribe( user => {
+                            
+                            // get token and _id
+                            observable.next(user);
+                            observable.complete();
+                        });
+                }
+            ]);
+
+        }); // end Observable
     };
+
+
 
     
 
