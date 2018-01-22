@@ -1,4 +1,12 @@
 
+<div class="alert alert-success" *ngIf="ImageIsUpload" >
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    Your Image is Uploading ...
+</div>
+
+
+
+
 <div class="panel panel-default"  *ngIf="user">
   <div class="panel-heading">
       <h3 class="panel-title text-center hidden-xs" > {{ user.name  }} </h3>

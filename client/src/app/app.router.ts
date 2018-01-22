@@ -74,6 +74,7 @@ export const routing : Routes = [
     },
     {
         path : 'change-password/:password_token' , 
-        component : ChangePasswordComponent 
+        component : ChangePasswordComponent ,
+        canActivate : [IsNotLoginGuard] 
     },
 ];

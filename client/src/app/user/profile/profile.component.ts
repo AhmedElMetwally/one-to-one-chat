@@ -13,7 +13,7 @@ export class ProfileComponent implements OnInit {
  
   user:Iuser;
 
-
+  ImageIsUpload : boolean = false;
 
   EditMode : any =  {
     name: false ,
@@ -113,7 +113,9 @@ export class ProfileComponent implements OnInit {
   
     // check if user selected Files
     if($event.target.files.length && isImage($event.target.files[0].name )){
-      console.log('uploading imgage.....');
+
+      // alert msg
+      this.ImageIsUpload = true;
 
       // add file
       var formData = new FormData();
@@ -122,6 +124,10 @@ export class ProfileComponent implements OnInit {
       // sent form
       this._userService.uploadImg(formData)
         .subscribe( data => {
+
+          // hide alert msg
+          this.ImageIsUpload = false;
+          
           // if Done
           if(data.status){
             this.Valid.image = true;
@@ -130,6 +136,7 @@ export class ProfileComponent implements OnInit {
             // if not done display error
             console.log(data.err);
           };
+          
         });
 
     }else{

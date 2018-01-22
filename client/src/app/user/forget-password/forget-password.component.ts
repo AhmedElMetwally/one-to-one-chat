@@ -32,6 +32,9 @@ export class ForgetPasswordComponent implements OnInit {
       .subscribe( data => {
         if(data.status){
           this.alert = "success";
+          setTimeout(() => {
+            this._router.navigate(['/about'])
+          } , 5000)
         }else{
           this.alert = "danger";
         };
