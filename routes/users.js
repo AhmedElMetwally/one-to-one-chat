@@ -6,12 +6,19 @@ const Message = require('../module/message');
 const secret = process.env.secret;
 const async = require('async');
 
+// config free image storge
 const cloudinary = require('cloudinary');
 cloudinary.config({ 
   cloud_name: 'hsdayit7q', 
   api_key: '778798688727479', 
   api_secret: 'ZnKI3T_IK89d2-sSY980QdVWqWg' 
 });
+
+// congif free email
+const mailjet = require ('node-mailjet').connect(
+  'ed23af36557730759d32b85969939c64',
+  'eb56562cc0123ed80a0476ed965194b9'
+);
 
 
 
@@ -116,7 +123,6 @@ router.post('/signin' , function(req,res){
     // get result
     ], (err , user , token) => {
       if(err){
-        console.log(err);
         res.status(200).json({ err : err , status : false});
       }else{
         res.status(200).json({
@@ -177,7 +183,7 @@ router.get('/ckeckAuth'  , function(req,res){
 
  
 // get user with his data
-router.get('/find' , ckeckToken , (req , res) => {
+router.get('/find'  , (req , res) => {
   let { _id } = req.query;
   User.findById(_id)
     .lean()
@@ -319,5 +325,154 @@ router.post('/image' , ckeckToken , (req , res) => {
 });
 
 
+
+
+// get email
+// find user with this email
+// create token with this user
+// sent email to this mail with url has token
+// to go /users/forget-password/:token
+router.post('/forget-password'  , (req , res) => {
+ 
+  // get user Email from body
+  let { email } = req.body;
+
+
+  async.waterfall([
+
+    // get user data by email
+    cb => {
+      User.findOne({email : email} , ( err , user ) => {
+        if(user){
+          cb(err , user);
+        }else{
+          // error
+          // err || new Error() -> beacouse user maybe null if email is not register
+          cb( err || new Error('email is Bad'));
+        }
+      })
+    },
+
+
+    // create token by this User
+    // user other secret key in json web token
+    (user , cb) => {
+      jwt.sign({ user : user } , 'other-secret-key-for-password' , { expiresIn: '1h' } , function(err , password_token){
+        console.log(`http://localhost:4200/change-password/${password_token}`)
+        cb(err , password_token   )
+      })
+    },
+
+    // sent mail to this user Email
+    // sent url with token has all user data
+    (password_token , cb ) => {
+        mailjet
+          .post("send", {'version': 'v3.1'})
+          .request({
+            "Messages":[
+              {
+                  "From": 
+                    {
+                      "Email": "carawanbaik77@gmail.com",
+                      "Name": "Admin"
+                    },
+                  "To": 
+                    [
+                      {
+                        "Email": "carawanbaik77@gmail.com",
+                        "Name": ""
+                      }
+                    ],
+                  "Subject": "change your password in (one to one chat)",
+                  "HTMLPart": `
+                    <h1  align='center'> 
+                      Dear user, welcome to one to one chat 
+                      <br>
+                      pleace go to this link to change your password 
+                      <br>
+                      this link is Good only 1h
+                    <h1> 
+                    <br> 
+                    <h2 align='center'> 
+                      <a href='http://one-to-one-chat.herokuapp.com/change-password/${password_token}'>
+                        click here
+                      </a>
+                    </h2> 
+                    `
+              }
+          ]
+        })
+        .then( () => {
+          cb(null);
+        })
+        .catch(err => cb(err))
+    }
+
+    // ckeck if has any error 
+    // to sent status to alert to user
+  ] , (err) => {
+    if(err){
+      res.status(200).json({err : err , status : false});
+    }else{
+      res.status(200).json({status : true});
+    };
+  });
+});
+
+
+
+// get password token
+// get new password
+// decode password token
+// then change password
+// get user with new password
+// create my signim token
+// sent _id and token to signin in angular
+router.post('/change-password' , (req , res ) => {
+
+  async.waterfall([
+
+
+    cb => {
+      // user the other secret key in json web token
+      jwt.verify(req.body.password_token , 'other-secret-key-for-password' , (err , decode) => {
+        cb(err , decode.user._id)
+      })
+
+    },
+
+
+    (_id , cb) => {
+      // change password
+      User.changePassword( _id  , req.body.password  , (err , user ) => {
+        cb(err , user);
+      })
+    },
+
+
+    (user , cb ) => {
+      // user my secret key in json web token
+      jwt.sign({user : user} , secret , { expiresIn: '24h' } , function(err , token){
+        cb(err , token , user );
+      })      
+    }
+
+
+  ] , (err , token , user) => {
+      if(err){
+        res.status(200).json({ err : err , status : false});
+      }else{
+        res.status(200).json({
+          status : true,
+          user : {
+            _id : user._id ,
+            token : token 
+          }
+        });
+      };   
+  });
+});
+
+ 
 
 module.exports = router;

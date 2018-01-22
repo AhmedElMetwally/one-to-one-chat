@@ -68,48 +68,5 @@ router.get('/tweets' , (req, res) => {
  
 
 
-// var token = 'adsadasdsadasd';
-// const mailjet = require ('node-mailjet')
-//       .connect
-//       (
-//         'ed23af36557730759d32b85969939c64',
-//         'eb56562cc0123ed80a0476ed965194b9'
-//       )
-
-//       mailjet
-//       .post("send", {'version': 'v3.1'})
-//       .request({
-//         "Messages":[
-//             {
-//                 "From": {
-//                     "Email": "carawanbaik77@gmail.com",
-//                     "Name": "Admin"
-//                 },
-//                 "To": [
-//                     {
-//                         "Email": "carawanbaik77@gmail.com",
-//                         "Name": ""
-//                     }
-//                 ],
-//                 "Subject": "change your password in (one to one chat)",
-//                 "HTMLPart": `
-//                   <h1  align='center'> 
-//                     Dear user, welcome to one to one chat 
-//                     <br>
-//                     pleace go to this link to change your password 
-//                   <h1> 
-//                   <br> 
-//                   <h2 align='center'> 
-//                     <a href='http://one-to-one-chat.herokuapp.com/user/forget-password/${token}'>
-//                       click here
-//                     </a>
-//                   </h2> 
-//                   `
-//             }
-//         ]
-//       })
-//       .then( e => console.log(e))
-
-
 
 module.exports = router;

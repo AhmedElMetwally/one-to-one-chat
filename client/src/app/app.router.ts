@@ -1,3 +1,5 @@
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ForgetPasswordComponent } from './user/forget-password/forget-password.component';
 import { ViewProfileComponent } from './view-profile/view-profile.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { TweetComponent } from './tweet/tweet.component';
@@ -46,6 +48,11 @@ export const routing : Routes = [
                 path : 'profile' , 
                 component : ProfileComponent , 
                 canActivate : [IsLoginGuard]  
+            },
+            {
+                path : 'forget-password' , 
+                component : ForgetPasswordComponent , 
+                canActivate : [IsNotLoginGuard] 
             }]
     },
     {
@@ -64,5 +71,9 @@ export const routing : Routes = [
     {
         path : 'viewProfile/:_id' , 
         component : ViewProfileComponent 
+    },
+    {
+        path : 'change-password/:password_token' , 
+        component : ChangePasswordComponent 
     },
 ];

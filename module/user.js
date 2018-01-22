@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt     = require('bcrypt');
 const Schema     = mongoose.Schema;
+const async = require('async');
+
 
 const UserSchema = new Schema({
     email    : { type : String ,  lowercase:true , unique: true , index : true},
@@ -46,24 +48,45 @@ UserSchema.methods.comparePassword = function(password  , callback ){
 UserSchema.statics.findOneOrCreate = function findOneOrCreate( condition ,doc, callback) {
     const self = this;
     self.findOne(condition, (err, result) => {
-      return result 
+        return result 
         ? callback(err, result)
         : self.create(doc, (err, result) => {
-          return callback(err, result);
+            return callback(err, result);
         });
     });
-  };
+};
 
+
+
+
+// get _id
+// get new Password
+// convert new password to hash
+// update password of user by _id
+// return err , user in callback 
+UserSchema.statics.changePassword = function changePassword( _id ,newPassword, callback) {
+    const self = this;
+
+    async.waterfall([
+        cb => {
+            bcrypt.hash(newPassword , 10 , (err , hash) => {
+                cb(err , hash);
+            })
+        },
+
+        (hash , cb) => {
+            self.findOneAndUpdate({_id : _id} , {password : hash} , {new : true} , (err , user) => {
+                cb(err , user);
+            })
+        }
+    ] , (err  , user) => {
+        callback(err , user)
+    })
+};
 
 
  
 module.exports = mongoose.model('user' , UserSchema);
 
-// module.exports.CkeckEmail = function(email){
-//     return new Promise( (resolve , reject)=>{
-//         UserSchema.findOne({email : email})
-//             .then( doc => {
-//                 res
-//             })
-//     })
-// }
+
+

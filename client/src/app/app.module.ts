@@ -28,7 +28,8 @@ import {  routing } from './app.router';
 
 import {TimeAgoPipe} from 'time-ago-pipe';
 import { ViewProfileComponent } from './view-profile/view-profile.component';
-import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { ForgetPasswordComponent } from './user/forget-password/forget-password.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 
@@ -48,6 +49,7 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
     UserNavbarComponent,
     ViewProfileComponent,
     ForgetPasswordComponent,
+    ChangePasswordComponent,
 
   ],
   imports: [
