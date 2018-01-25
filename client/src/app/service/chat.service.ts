@@ -15,25 +15,31 @@ export class ChatService {
     private _http:Http){};
 
 
+
   // socket.io
   io = io( environment.url );
 
 
+
+  socketIO_emit_login(token : string){
+    this.io.emit('login' , token);
+    return false;
+  }
+
   // login with token
   // get this user with updated socketId
-  socketIO_login(token:string):Observable<Iuser> {
-    this.io.emit('login' , token);
+  socketIO_login():Observable<Iuser> {
     return new Observable(observable => {
       this.io.on('login' , data => {
-        observable.next(data.user);
+        observable.next( data.user );
         // observable.complete();
       });
     });
-
   };
 
 
-  // on any socket (connect or disconnet)
+
+  // on any socket ( connect or disconnet )
   // on refresh get all updated users
   // filter thisUser
   // sort users (online user first)
@@ -43,8 +49,8 @@ export class ChatService {
       this.io.on('refresh' , data => {
         observable.next(
           data.users
-          .filter( u => u._id != localStorage.getItem('_id'))
-          .sort(A => A.online ? -1 : 1)
+            .filter( u => u._id != localStorage.getItem('_id'))
+            .sort(A => A.online ? -1 : 1)
         );
       });
     });

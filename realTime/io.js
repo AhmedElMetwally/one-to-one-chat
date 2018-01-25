@@ -27,8 +27,8 @@ module.exports =  io => {
                 // get token
                 // sent decode
                 cb => {
-                    jwt.verify( token , secret , (err , decode ) => {
-                        cb(err , decode);
+                    jwt.verify( token , secret , ( err , decode ) => {
+                        cb( err , decode );
                     })
                 },
 
@@ -37,9 +37,10 @@ module.exports =  io => {
                 // sent updated user
                 ( decode , cb ) => {
                     User.findByIdAndUpdate({_id : decode.user._id} , {socketId : socket.id} ,  {new: true} , (err , user) => {
-                        cb(err , user);
+                        cb( err , user );
                     });
                 },
+                
                 
                 // get updated user
                 // find all users
@@ -49,23 +50,20 @@ module.exports =  io => {
                     User.find({})
                         .lean()
                         .exec( (err , users) => {
-                            var EditUsers = [];
                             for(let i = 0 ; i < users.length ;  i++){
                                 if(Object.keys(io.sockets.sockets).indexOf(users[i].socketId) > -1){
                                     users[i].online = true;
-                                    EditUsers.push(users[i]);
                                 }else{
                                     users[i].online = false;
-                                    EditUsers.push(users[i]);
                                 };
                             };
-                            cb(err , user , EditUsers);
+                            cb(err , user , users);
                     });
                 }
 
+
                 // if err sent eror to logout from app
-                // 
-            ] , (err , user , EditUsers) => { 
+            ] , (err , user , users) => { 
                 if(err){
                     socket.emit('err' ,  {err : err , event : 'login'});
                 }else{
@@ -73,7 +71,7 @@ module.exports =  io => {
                     socket.emit('login' ,  {user : user});
 
                     // sent all updated users to all users
-                    io.emit('refresh' ,  {users : EditUsers });
+                    io.emit('refresh' ,  {users : users });
                 };
             });
 
@@ -95,14 +93,11 @@ module.exports =  io => {
                     User.find({})
                         .lean() // this is very import to change Property in mongoose 
                         .exec((err , users) => {
-                            var EditUsers = [];
                             for(let i = 0 ; i < users.length ;  i++){
                                 if(Object.keys(io.sockets.sockets).indexOf(users[i].socketId) > -1){
                                     users[i].online = true;
-                                    EditUsers.push(users[i]);
                                 }else{
                                     users[i].online = false;
-                                    EditUsers.push(users[i]);
                                 };
                             };
                             cb(err , users);
@@ -181,3 +176,8 @@ module.exports =  io => {
 
     });
 };
+
+
+
+
+

@@ -24,11 +24,11 @@ export class ChatComponent implements OnInit {
     private _authService : AuthService){
 
 
-    // login in socket io
-    // sent token 
-    // update socketId in user DB
-    // get thisUser
-    this._chatService.socketIO_login( localStorage.getItem('token') )
+    // new connect with token
+    this.newConnect();
+      
+    // get thisUser after login
+    this._chatService.socketIO_login()
       .subscribe( user => {
         this.user = user;
       })
@@ -66,6 +66,18 @@ export class ChatComponent implements OnInit {
         console.log(err)
         this._authService.Logout();
       });
+
+
+
+    // this is test function
+    // if socket.io 
+    // auto disconnect 
+    // connect
+    this._chatService.io.on('disconnect' , () => {
+      console.log('disconnect')
+      // new connect with token
+      this.newConnect();
+    })
     
 
   }; // end constructor
@@ -107,8 +119,12 @@ export class ChatComponent implements OnInit {
         }else{
           console.log(data.err);
         };
-        // fouces the input message
+
+      // fouces the input message
+      if(this._inputContent){
         this._inputContent.nativeElement.focus();
+      }
+
       });
   };
 
@@ -119,12 +135,8 @@ export class ChatComponent implements OnInit {
   // update socketId in user DB
   // get thisUser
   newConnect() :void{
-    this._chatService.io.connect()
-    this._chatService.socketIO_login( localStorage.getItem('token') )
-      .subscribe( user => {
-        console.log('new connect socket.io')
-        this.user = user;
-      });
+    this._chatService.io.connect();
+    this._chatService.socketIO_emit_login( localStorage.getItem('token') );
   };
 
 
@@ -136,6 +148,10 @@ export class ChatComponent implements OnInit {
     this.caller = null;
     this.messages = [];
   };
+
+
+
+  
 
 
   ngOnInit(){
