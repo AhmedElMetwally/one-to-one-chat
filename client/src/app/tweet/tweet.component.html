@@ -61,7 +61,7 @@
         <div class="row tweet">
             <!-- image -->
             <div class="col-md-2 col-xs-3 ">
-              <img [src]='tweet.user.image'  class="img-responsive img" alt="Image">
+              <img [routerLink]="['/viewProfile', tweet.user._id]" style="cursor: pointer;" [src]='tweet.user.image'  class="img-responsive img" alt="Image">
             </div>
             
             <!-- name -->

@@ -310,3 +310,15 @@
 	}
 }
 /* app loading */
+
+
+/* forms */
+.any-from {
+	width: 50%;
+}
+@media (max-width: 767px){
+	.any-from {
+		width: 90%;
+	}
+}
+

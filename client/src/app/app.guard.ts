@@ -12,10 +12,10 @@ export class IsLoginGuard implements CanActivate {
 
   canActivate(){
     if(this._authService.isLogin()){
-      return true
+      return true;
     }else{
-      this._router.navigate(['/user' , 'signin'])
-      return false
+      this._router.navigate(['/user' , 'profile'])
+      return false;
     }
   }
 }
@@ -31,7 +31,7 @@ export class IsNotLoginGuard implements CanActivate {
         if( ! this._authService.isLogin() ){
             return true
         }else{
-            this._router.navigate(['/user' , 'logout'])
+            this._router.navigate(['/user' , 'profile'])
             return false
         }
   }
